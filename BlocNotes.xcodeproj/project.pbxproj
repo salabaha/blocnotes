@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		558284B51A9525C9004B5082 /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558284B41A9525C9004B5082 /* Note.swift */; };
 		55C7BD061A9521C50086C048 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C7BD051A9521C50086C048 /* AppDelegate.swift */; };
 		55C7BD091A9521C50086C048 /* BlocNotes.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 55C7BD071A9521C50086C048 /* BlocNotes.xcdatamodeld */; };
 		55C7BD0B1A9521C50086C048 /* MasterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C7BD0A1A9521C50086C048 /* MasterViewController.swift */; };
@@ -28,6 +29,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		558284B41A9525C9004B5082 /* Note.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Note.swift; sourceTree = "<group>"; };
 		55C7BD001A9521C50086C048 /* BlocNotes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BlocNotes.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		55C7BD041A9521C50086C048 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		55C7BD051A9521C50086C048 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -60,6 +62,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		558284B31A952559004B5082 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				55C7BD071A9521C50086C048 /* BlocNotes.xcdatamodeld */,
+				558284B41A9525C9004B5082 /* Note.swift */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
 		55C7BCF71A9521C50086C048 = {
 			isa = PBXGroup;
 			children = (
@@ -81,13 +92,13 @@
 		55C7BD021A9521C50086C048 /* BlocNotes */ = {
 			isa = PBXGroup;
 			children = (
+				558284B31A952559004B5082 /* Model */,
 				55C7BD051A9521C50086C048 /* AppDelegate.swift */,
 				55C7BD0A1A9521C50086C048 /* MasterViewController.swift */,
 				55C7BD0C1A9521C50086C048 /* DetailViewController.swift */,
 				55C7BD0E1A9521C50086C048 /* Main.storyboard */,
 				55C7BD111A9521C50086C048 /* Images.xcassets */,
 				55C7BD131A9521C50086C048 /* LaunchScreen.xib */,
-				55C7BD071A9521C50086C048 /* BlocNotes.xcdatamodeld */,
 				55C7BD031A9521C50086C048 /* Supporting Files */,
 			);
 			path = BlocNotes;
@@ -218,6 +229,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				558284B51A9525C9004B5082 /* Note.swift in Sources */,
 				55C7BD061A9521C50086C048 /* AppDelegate.swift in Sources */,
 				55C7BD091A9521C50086C048 /* BlocNotes.xcdatamodeld in Sources */,
 				55C7BD0B1A9521C50086C048 /* MasterViewController.swift in Sources */,
@@ -417,6 +429,7 @@
 				55C7BD261A9521C50086C048 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		55C7BD271A9521C50086C048 /* Build configuration list for PBXNativeTarget "BlocNotesTests" */ = {
 			isa = XCConfigurationList;
@@ -425,6 +438,7 @@
 				55C7BD291A9521C50086C048 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 

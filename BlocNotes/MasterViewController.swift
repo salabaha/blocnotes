@@ -71,6 +71,9 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
                 controller.navigationItem.leftItemsSupplementBackButton = true
             }
         }
+        if segue.identifier == "addNote" {
+            // nothing here (for now)
+        }
     }
         
     // MARK: - Table View

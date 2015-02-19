@@ -2,6 +2,7 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7515.2" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="H1p-Uh-vWS">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7512"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
         <!--Master-->
@@ -110,7 +111,7 @@
                     <navigationItem key="navigationItem" title="Master" id="Zdf-7t-Un8">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="MUy-bA-CMR">
                             <connections>
-                                <segue destination="AIl-Oc-lgv" kind="show" id="NS6-eB-hV6"/>
+                                <segue destination="AIl-Oc-lgv" kind="show" identifier="addNote" id="NS6-eB-hV6"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -131,23 +132,44 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter title here" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="c13-tV-pJm">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ku9-Aq-6Ro">
+                                <rect key="frame" x="283" y="550" width="34" height="30"/>
+                                <state key="normal" title="Save">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="addNote:" destination="AIl-Oc-lgv" eventType="touchUpInside" id="Iqk-NW-dGo"/>
+                                </connections>
+                            </button>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter title here" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="c13-tV-pJm">
                                 <rect key="frame" x="16" y="72" width="568" height="30"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="words"/>
                             </textField>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter text here" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Hrw-nE-Q9O">
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter text here" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Hrw-nE-Q9O">
                                 <rect key="frame" x="16" y="110" width="568" height="30"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="Hrw-nE-Q9O" firstAttribute="leading" secondItem="c13-tV-pJm" secondAttribute="leading" id="CUx-QO-VUF"/>
+                            <constraint firstItem="Hrw-nE-Q9O" firstAttribute="top" secondItem="c13-tV-pJm" secondAttribute="bottom" constant="8" symbolic="YES" id="EJw-PR-Dzl"/>
+                            <constraint firstItem="Ku9-Aq-6Ro" firstAttribute="centerX" secondItem="c13-tV-pJm" secondAttribute="centerX" id="Xtc-br-uQG"/>
+                            <constraint firstItem="Hrw-nE-Q9O" firstAttribute="top" secondItem="rDK-3q-pbB" secondAttribute="top" constant="110" id="bZJ-qm-lqz"/>
+                            <constraint firstAttribute="bottom" secondItem="Ku9-Aq-6Ro" secondAttribute="bottom" constant="20" symbolic="YES" id="eD5-2d-2ac"/>
+                            <constraint firstItem="Hrw-nE-Q9O" firstAttribute="leading" secondItem="rDK-3q-pbB" secondAttribute="leadingMargin" id="hmi-XE-Jfk"/>
+                            <constraint firstItem="Ku9-Aq-6Ro" firstAttribute="centerX" secondItem="Hrw-nE-Q9O" secondAttribute="centerX" id="oWb-fp-5d9"/>
+                            <constraint firstItem="Ku9-Aq-6Ro" firstAttribute="centerX" secondItem="rDK-3q-pbB" secondAttribute="centerX" id="wnE-7D-L9y"/>
+                        </constraints>
                     </view>
-                    <toolbarItems>
-                        <barButtonItem style="done" systemItem="save" id="bzp-12-ch6"/>
-                    </toolbarItems>
-                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
+                    <toolbarItems/>
+                    <nil key="simulatedBottomBarMetrics"/>
+                    <connections>
+                        <outlet property="newNoteBody" destination="Hrw-nE-Q9O" id="x7G-sk-bhv"/>
+                        <outlet property="newNoteTitle" destination="c13-tV-pJm" id="V9c-ta-pqV"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="yY3-C8-Qyc" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

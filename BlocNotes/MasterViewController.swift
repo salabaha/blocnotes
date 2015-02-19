@@ -12,7 +12,8 @@ import CoreData
 class MasterViewController: UITableViewController, NSFetchedResultsControllerDelegate {
     
     var detailViewController: DetailViewController? = nil
-    var managedObjectContext: NSManagedObjectContext? = nil // This was canned code
+    var addNoteViewController:AddNoteViewController? = nil  // I added this
+    var managedObjectContext: NSManagedObjectContext? = nil
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -30,6 +31,8 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         
         if let split = self.splitViewController {
             let controllers = split.viewControllers
+            let context = self.fetchedResultsController.managedObjectContext
+            let entity = self.fetchedResultsController.fetchRequest.entity!
             self.detailViewController = controllers[controllers.count-1].topViewController as? DetailViewController
         }
         
@@ -71,8 +74,13 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
                 controller.navigationItem.leftItemsSupplementBackButton = true
             }
         }
-    }
         
+        if segue.identifier == "addNote" {
+            println("segue.identifier is addNote")
+            let controller = (segue.destinationViewController as! UINavigationController).topViewController as! AddNoteViewController
+        }
+    }
+    
     // MARK: - Table View
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {

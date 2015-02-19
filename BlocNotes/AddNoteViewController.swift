@@ -7,9 +7,13 @@
 //
 
 import UIKit
+import CoreData
 
 class AddNoteViewController: UIViewController {
 
+    @IBOutlet weak var newNoteTitle: UITextField!
+    @IBOutlet weak var newNoteBody: UITextField!
+        
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -30,4 +34,13 @@ class AddNoteViewController: UIViewController {
         // Pass the selected object to the new view controller.
     }
 
+//    @IBAction func saveNote(sender: UIBarButtonItem) {
+//        let newNote = NSEntityDescription.insertNewObjectForEntityForName("Note", inManagedObjectContext: AppDelegate.managedObjectContext!) as! Note
+//        
+//        newNoteTitle.noteTitle = self.newNoteTitle
+//        newNoteBody.noteBody = self.newNoteBody
+//        self.dateCreated = NSDate()
+//        newNote.dateEdited = NSDate()
+//
+//    }
 }

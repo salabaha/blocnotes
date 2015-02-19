@@ -12,8 +12,10 @@ import CoreData
 class MasterViewController: UITableViewController, NSFetchedResultsControllerDelegate {
 
     var detailViewController: DetailViewController? = nil
-    var managedObjectContext: NSManagedObjectContext? = nil
-
+    var managedObjectContext: NSManagedObjectContext? = nil // This was canned code
+    
+//    let managedObjectContext = (UIApplication.sharedApplication().delegate as! AppDelegate).managedObjectContext
+    
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -27,12 +29,6 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
-//        // Retrieve the managed object context from the AppDelegate
-//        let managedObjectContext = (UIApplication.sharedApplication().delegate as! AppDelegate).managedObjectContext
-//        
-//        // Print it to console
-//        print(managedObjectContext)
-        
         self.navigationItem.leftBarButtonItem = self.editButtonItem()
 
         let addButton = UIBarButtonItem(barButtonSystemItem: .Add, target: self, action: "insertNewObject:")
@@ -41,6 +37,22 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
             let controllers = split.viewControllers
             self.detailViewController = controllers[controllers.count-1].topViewController as? DetailViewController
         }
+        
+        // Creates random notes if none exist in the peristent store
+        if (self.managedObjectContext != nil) {
+            randomNoteCreator()
+        } else {
+            return
+        }
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        // TODO: There's gotta be a way to make this cleaner so it's accessible throughout the class.
+        // Retrieve the managed object context from the AppDelegate
+        let managedObjectContext = (UIApplication.sharedApplication().delegate as! AppDelegate).managedObjectContext
+        
+        // Print it to console
+        print(managedObjectContext)
     }
 
     override func didReceiveMemoryWarning() {
@@ -55,14 +67,14 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
              
         // If appropriate, configure the new managed object.
         // Normally you should use accessor methods, but using KVC here avoids the need to add a custom class to the template.
-        newManagedObject.setValue(NSDate(), forKey: "noteTitle")
+        newManagedObject.setValue(NSString(), forKey: "noteTitle")
              
         // Save the context.
         var error: NSError? = nil
         if !context.save(&error) {
             // Replace this implementation with code to handle the error appropriately.
             // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-            //println("Unresolved error \(error), \(error.userInfo)")
+            println("Unresolved error \(error), \(error?.userInfo)")
             abort()
         }
     }
@@ -154,7 +166,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     	if !_fetchedResultsController!.performFetch(&error) {
     	     // Replace this implementation with code to handle the error appropriately.
     	     // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development. 
-             //println("Unresolved error \(error), \(error.userInfo)")
+             println("Unresolved error \(error), \(error?.userInfo)")
     	     abort()
     	}
         
@@ -205,6 +217,20 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
          self.tableView.reloadData()
      }
      */
-
+    
+    // MARK: - Add sample data
+    func randomNoteCreator() {
+        var count: Int = 1
+        while count < 11 {
+            let newNote = NSEntityDescription.insertNewObjectForEntityForName("Note", inManagedObjectContext: self.managedObjectContext!) as! Note
+            
+            newNote.noteTitle = "Test Note \(count)"
+            newNote.noteBody = "Now is the time for all good men to come to the aid of their country"
+            newNote.dateCreated = NSDate()
+            newNote.dateEdited = NSDate()
+            count++
+        }
+        
+    }
 }
 

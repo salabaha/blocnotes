@@ -117,7 +117,7 @@
                     <navigationItem key="navigationItem" title="Master" id="Zdf-7t-Un8">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="MUy-bA-CMR">
                             <connections>
-                                <segue destination="AIl-Oc-lgv" kind="show" identifier="addNote" id="NS6-eB-hV6"/>
+                                <segue destination="lG1-qn-xzI" kind="show" identifier="addNote" id="NS6-eB-hV6"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -138,26 +138,13 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="536"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VN9-uM-klk">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
-                                <items>
-                                    <navigationItem title="Create Note" id="P8H-Vt-pa0">
-                                        <barButtonItem key="backBarButtonItem" title="Note List" id="eZY-Zq-VFu"/>
-                                        <barButtonItem key="rightBarButtonItem" style="done" systemItem="save" id="QKJ-OF-hSo">
-                                            <connections>
-                                                <action selector="addNote:" destination="AIl-Oc-lgv" id="COf-UM-jWN"/>
-                                            </connections>
-                                        </barButtonItem>
-                                    </navigationItem>
-                                </items>
-                            </navigationBar>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter title here" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="c13-tV-pJm">
-                                <rect key="frame" x="16" y="65" width="568" height="30"/>
+                                <rect key="frame" x="16" y="8" width="568" height="30"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="words"/>
                             </textField>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="C36-xh-Hqc">
-                                <rect key="frame" x="16" y="103" width="568" height="203"/>
+                                <rect key="frame" x="16" y="46" width="568" height="203"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
@@ -165,20 +152,28 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="C36-xh-Hqc" firstAttribute="leading" secondItem="rDK-3q-pbB" secondAttribute="leadingMargin" id="110-yt-hsF"/>
-                            <constraint firstItem="C36-xh-Hqc" firstAttribute="leading" secondItem="c13-tV-pJm" secondAttribute="leading" id="5Xe-gT-vUf"/>
-                            <constraint firstItem="C36-xh-Hqc" firstAttribute="top" secondItem="c13-tV-pJm" secondAttribute="bottom" constant="8" symbolic="YES" id="Alk-Vs-2Xq"/>
-                            <constraint firstItem="VN9-uM-klk" firstAttribute="leading" secondItem="rDK-3q-pbB" secondAttribute="leading" id="J0A-cg-tzN"/>
-                            <constraint firstAttribute="trailing" secondItem="VN9-uM-klk" secondAttribute="trailing" id="OsH-mv-HVm"/>
-                            <constraint firstItem="VN9-uM-klk" firstAttribute="centerX" secondItem="C36-xh-Hqc" secondAttribute="centerX" id="VTU-lp-GOp"/>
-                            <constraint firstItem="VN9-uM-klk" firstAttribute="top" secondItem="OI2-Z8-o6u" secondAttribute="bottom" id="XOX-oe-TIA"/>
-                            <constraint firstItem="c13-tV-pJm" firstAttribute="top" secondItem="VN9-uM-klk" secondAttribute="bottom" constant="21" id="p9x-dm-i9w"/>
-                            <constraint firstItem="VN9-uM-klk" firstAttribute="centerX" secondItem="c13-tV-pJm" secondAttribute="centerX" id="rfB-rB-8JT"/>
-                            <constraint firstItem="dZ8-ok-tJY" firstAttribute="top" secondItem="C36-xh-Hqc" secondAttribute="bottom" constant="186" id="xRS-0c-cPH"/>
+                            <constraint firstItem="c13-tV-pJm" firstAttribute="leading" secondItem="C36-xh-Hqc" secondAttribute="leading" id="2HB-4G-u62"/>
+                            <constraint firstItem="c13-tV-pJm" firstAttribute="top" secondItem="OI2-Z8-o6u" secondAttribute="bottom" constant="8" symbolic="YES" id="54V-zc-fAx"/>
+                            <constraint firstItem="c13-tV-pJm" firstAttribute="leading" secondItem="rDK-3q-pbB" secondAttribute="leading" constant="16" id="5Wb-jU-iGV"/>
+                            <constraint firstItem="C36-xh-Hqc" firstAttribute="leading" secondItem="rDK-3q-pbB" secondAttribute="leading" constant="16" id="FSS-xF-ecK"/>
+                            <constraint firstAttribute="trailing" secondItem="C36-xh-Hqc" secondAttribute="trailing" constant="16" id="jGG-KU-4e5"/>
+                            <constraint firstItem="dZ8-ok-tJY" firstAttribute="top" secondItem="C36-xh-Hqc" secondAttribute="bottom" constant="243" id="o03-xo-0Ms"/>
+                            <constraint firstItem="C36-xh-Hqc" firstAttribute="trailing" secondItem="c13-tV-pJm" secondAttribute="trailing" id="oip-mC-5VM"/>
+                            <constraint firstItem="C36-xh-Hqc" firstAttribute="top" secondItem="c13-tV-pJm" secondAttribute="bottom" constant="8" symbolic="YES" id="pMV-Gr-se8"/>
+                            <constraint firstItem="c13-tV-pJm" firstAttribute="trailing" secondItem="rDK-3q-pbB" secondAttribute="trailingMargin" id="tU3-cZ-UAb"/>
+                            <constraint firstItem="c13-tV-pJm" firstAttribute="leading" secondItem="rDK-3q-pbB" secondAttribute="leadingMargin" id="wgM-Vm-lGS"/>
+                            <constraint firstAttribute="trailing" secondItem="c13-tV-pJm" secondAttribute="trailing" constant="16" id="xh2-9u-KXU"/>
                         </constraints>
                     </view>
                     <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
                     <toolbarItems/>
+                    <navigationItem key="navigationItem" id="Lk1-5M-E7h">
+                        <barButtonItem key="rightBarButtonItem" style="done" systemItem="save" id="9Fw-1t-D9x">
+                            <connections>
+                                <action selector="addNote:" destination="AIl-Oc-lgv" id="Xps-1S-Czm"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="newNoteBody" destination="C36-xh-Hqc" id="UWy-yp-iLt"/>
@@ -187,7 +182,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="yY3-C8-Qyc" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="131" y="-1630"/>
+            <point key="canvasLocation" x="943" y="-1630"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="r7l-gg-dq7">
@@ -203,6 +198,24 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SLD-UC-DBI" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-1325" y="-871"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="txd-Zj-zdw">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="lG1-qn-xzI" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="ldh-pr-Tmo">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="AIl-Oc-lgv" kind="relationship" relationship="rootViewController" id="h6G-GJ-50V"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="pJC-7j-7Tj" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="131" y="-1630"/>
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>

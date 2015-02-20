@@ -33,6 +33,7 @@
 /* Begin PBXFileReference section */
 		553734C11A95FE9F00757DE1 /* AddNoteViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddNoteViewController.swift; sourceTree = "<group>"; };
 		553734C61A97AB8700757DE1 /* ReadMe.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ReadMe.txt; sourceTree = "<group>"; };
+		557BA3781A97D46B00CB58AB /* BlocNotes.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = BlocNotes.entitlements; sourceTree = "<group>"; };
 		558284B41A9525C9004B5082 /* Note.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Note.swift; sourceTree = "<group>"; };
 		55C7BD001A9521C50086C048 /* BlocNotes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BlocNotes.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		55C7BD041A9521C50086C048 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -108,6 +109,7 @@
 		55C7BD021A9521C50086C048 /* BlocNotes */ = {
 			isa = PBXGroup;
 			children = (
+				557BA3781A97D46B00CB58AB /* BlocNotes.entitlements */,
 				553734C01A95FE2500757DE1 /* Views */,
 				558284B31A952559004B5082 /* Model */,
 				55C7BD051A9521C50086C048 /* AppDelegate.swift */,
@@ -196,6 +198,9 @@
 						SystemCapabilities = {
 							com.apple.ApplicationGroups.iOS = {
 								enabled = 0;
+							};
+							com.apple.iCloud = {
+								enabled = 1;
 							};
 						};
 					};

@@ -12,6 +12,12 @@ Steve says use this:
 UIDocumentPicker
 http://www.macstories.net/tutorials/implementing-ios-8-document-pickers/
 
+Steps after enabling iCloud
+1) Add the iCloud entitlement to your Apple ID
+2) Add the iCloud containers to your Apple ID
+3) Add the iCloud entitlement to your entitlements file
+4) Link CloudKit framework
+
 Replace textField w/ textView in AddNoteVC
 
 Search bar info

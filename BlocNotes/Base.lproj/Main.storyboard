@@ -2,6 +2,7 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7515.2" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="H1p-Uh-vWS">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7512"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
         <!--Master-->
@@ -144,12 +145,12 @@
                                     </navigationItem>
                                 </items>
                             </navigationBar>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter text here" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Hrw-nE-Q9O">
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter text here" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Hrw-nE-Q9O">
                                 <rect key="frame" x="16" y="109" width="568" height="30"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences" spellCheckingType="yes"/>
                             </textField>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter title here" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="c13-tV-pJm">
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter title here" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="c13-tV-pJm">
                                 <rect key="frame" x="16" y="65" width="568" height="30"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="words"/>
@@ -157,9 +158,19 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstAttribute="trailing" secondItem="VN9-uM-klk" secondAttribute="trailing" id="ea1-Bk-J1F"/>
-                            <constraint firstItem="VN9-uM-klk" firstAttribute="leading" secondItem="rDK-3q-pbB" secondAttribute="leading" id="gOU-rS-aUP"/>
-                            <constraint firstItem="VN9-uM-klk" firstAttribute="top" secondItem="OI2-Z8-o6u" secondAttribute="bottom" id="oso-4t-37O"/>
+                            <constraint firstItem="VN9-uM-klk" firstAttribute="leading" secondItem="rDK-3q-pbB" secondAttribute="leading" id="16h-4Z-edy"/>
+                            <constraint firstItem="c13-tV-pJm" firstAttribute="trailing" secondItem="Hrw-nE-Q9O" secondAttribute="trailing" id="27F-oy-nSV"/>
+                            <constraint firstItem="c13-tV-pJm" firstAttribute="leading" secondItem="rDK-3q-pbB" secondAttribute="leadingMargin" id="50w-en-aDl"/>
+                            <constraint firstAttribute="trailing" secondItem="VN9-uM-klk" secondAttribute="trailing" id="7I4-xO-fO5"/>
+                            <constraint firstItem="c13-tV-pJm" firstAttribute="leading" secondItem="rDK-3q-pbB" secondAttribute="leading" constant="16" id="B5o-To-5kk"/>
+                            <constraint firstItem="c13-tV-pJm" firstAttribute="centerX" secondItem="VN9-uM-klk" secondAttribute="centerX" id="E0G-o8-cC1"/>
+                            <constraint firstItem="VN9-uM-klk" firstAttribute="top" secondItem="OI2-Z8-o6u" secondAttribute="bottom" id="Rln-vH-x6z"/>
+                            <constraint firstItem="c13-tV-pJm" firstAttribute="leading" secondItem="Hrw-nE-Q9O" secondAttribute="leading" id="YYA-Zu-Fbc"/>
+                            <constraint firstItem="Hrw-nE-Q9O" firstAttribute="leading" secondItem="rDK-3q-pbB" secondAttribute="leading" constant="16" id="YgK-ip-zJa"/>
+                            <constraint firstAttribute="trailing" secondItem="c13-tV-pJm" secondAttribute="trailing" constant="16" id="eVH-Ih-eRh"/>
+                            <constraint firstItem="Hrw-nE-Q9O" firstAttribute="top" secondItem="c13-tV-pJm" secondAttribute="bottom" constant="14" id="iBP-pD-8ky"/>
+                            <constraint firstAttribute="trailing" secondItem="Hrw-nE-Q9O" secondAttribute="trailing" constant="16" id="sZz-5d-mG5"/>
+                            <constraint firstItem="c13-tV-pJm" firstAttribute="top" secondItem="VN9-uM-klk" secondAttribute="bottom" constant="21" id="zDc-eY-Vel"/>
                         </constraints>
                     </view>
                     <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>

@@ -206,5 +206,27 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     }
     */
     
+    // MARK: - UIActivityViewController (aka "Share Sheet")
+    
+    /*
+    
+    I think prepareForSegue shows how to get a hold of the object
+    
+    // if UIGestureRecognizer is held down for 1 second && finger on a cell {
+    pull up share sheet and do something
+    }
+    
+    */
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 }
 

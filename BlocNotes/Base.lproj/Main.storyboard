@@ -48,7 +48,13 @@
                         </constraints>
                     </view>
                     <toolbarItems/>
-                    <navigationItem key="navigationItem" title="Detail" id="mOI-FS-AaM"/>
+                    <navigationItem key="navigationItem" title="Note" id="mOI-FS-AaM">
+                        <barButtonItem key="rightBarButtonItem" systemItem="compose" id="PrW-GZ-yXz">
+                            <connections>
+                                <action selector="shareNote:" destination="JEX-9P-axG" id="Ehc-NU-N8b"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="detailDescriptionLabel" destination="0XM-y9-sOw" id="deQ-Na-JPF"/>
                     </connections>

@@ -2,7 +2,6 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7515.2" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="H1p-Uh-vWS">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7512"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
         <!--Master-->
@@ -111,11 +110,7 @@
                     <navigationItem key="navigationItem" title="Master" id="Zdf-7t-Un8">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="MUy-bA-CMR">
                             <connections>
-<<<<<<< HEAD
                                 <segue destination="AIl-Oc-lgv" kind="show" identifier="addNote" id="NS6-eB-hV6"/>
-=======
-                                <segue destination="AIl-Oc-lgv" kind="presentation" identifier="addNote" modalPresentationStyle="overCurrentContext" id="NS6-eB-hV6"/>
->>>>>>> 8fe142108564ad16492bb36d1fa680171471804f
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -124,96 +119,55 @@
             </objects>
             <point key="canvasLocation" x="-571" y="-1630"/>
         </scene>
-        <!--Add Note-->
+        <!--Add Note View Controller-->
         <scene sceneID="xCH-5T-bPV">
             <objects>
-                <viewController storyboardIdentifier="addNote" title="Add Note" id="AIl-Oc-lgv" customClass="AddNoteViewController" customModule="BlocNotes" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="addNote" hidesBottomBarWhenPushed="YES" id="AIl-Oc-lgv" customClass="AddNoteViewController" customModule="BlocNotes" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="OI2-Z8-o6u"/>
                         <viewControllerLayoutGuide type="bottom" id="dZ8-ok-tJY"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="rDK-3q-pbB">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="536"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-<<<<<<< HEAD
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ku9-Aq-6Ro">
-                                <rect key="frame" x="283" y="550" width="34" height="30"/>
-                                <state key="normal" title="Save">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="addNote:" destination="AIl-Oc-lgv" eventType="touchUpInside" id="Iqk-NW-dGo"/>
-                                </connections>
-                            </button>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter title here" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="c13-tV-pJm">
-                                <rect key="frame" x="16" y="72" width="568" height="30"/>
-                                <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="words"/>
-                            </textField>
-=======
->>>>>>> 8fe142108564ad16492bb36d1fa680171471804f
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter text here" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Hrw-nE-Q9O">
-                                <rect key="frame" x="16" y="110" width="568" height="30"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences" spellCheckingType="yes"/>
-                            </textField>
-                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="P10-SO-5sg">
+                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VN9-uM-klk">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
                                 <items>
-                                    <navigationItem id="gxZ-Qz-x8W">
-                                        <barButtonItem key="rightBarButtonItem" style="done" systemItem="save" id="oNp-J0-HLu">
+                                    <navigationItem title="Create Note" id="P8H-Vt-pa0">
+                                        <barButtonItem key="backBarButtonItem" title="Note List" id="eZY-Zq-VFu"/>
+                                        <barButtonItem key="rightBarButtonItem" style="done" systemItem="save" id="QKJ-OF-hSo">
                                             <connections>
-                                                <action selector="saveNote:" destination="AIl-Oc-lgv" id="NBo-ty-964"/>
+                                                <action selector="addNote:" destination="AIl-Oc-lgv" id="COf-UM-jWN"/>
                                             </connections>
                                         </barButtonItem>
                                     </navigationItem>
                                 </items>
                             </navigationBar>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter title here" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="c13-tV-pJm">
-                                <rect key="frame" x="16" y="66" width="568" height="30"/>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter text here" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Hrw-nE-Q9O">
+                                <rect key="frame" x="16" y="109" width="568" height="30"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences" spellCheckingType="yes"/>
+                            </textField>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter title here" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="c13-tV-pJm">
+                                <rect key="frame" x="16" y="65" width="568" height="30"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="words"/>
                             </textField>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-<<<<<<< HEAD
-                            <constraint firstItem="Hrw-nE-Q9O" firstAttribute="leading" secondItem="c13-tV-pJm" secondAttribute="leading" id="CUx-QO-VUF"/>
-                            <constraint firstItem="Hrw-nE-Q9O" firstAttribute="top" secondItem="c13-tV-pJm" secondAttribute="bottom" constant="8" symbolic="YES" id="EJw-PR-Dzl"/>
-                            <constraint firstItem="Ku9-Aq-6Ro" firstAttribute="centerX" secondItem="c13-tV-pJm" secondAttribute="centerX" id="Xtc-br-uQG"/>
-                            <constraint firstItem="Hrw-nE-Q9O" firstAttribute="top" secondItem="rDK-3q-pbB" secondAttribute="top" constant="110" id="bZJ-qm-lqz"/>
-                            <constraint firstAttribute="bottom" secondItem="Ku9-Aq-6Ro" secondAttribute="bottom" constant="20" symbolic="YES" id="eD5-2d-2ac"/>
-                            <constraint firstItem="Hrw-nE-Q9O" firstAttribute="leading" secondItem="rDK-3q-pbB" secondAttribute="leadingMargin" id="hmi-XE-Jfk"/>
-                            <constraint firstItem="Ku9-Aq-6Ro" firstAttribute="centerX" secondItem="Hrw-nE-Q9O" secondAttribute="centerX" id="oWb-fp-5d9"/>
-                            <constraint firstItem="Ku9-Aq-6Ro" firstAttribute="centerX" secondItem="rDK-3q-pbB" secondAttribute="centerX" id="wnE-7D-L9y"/>
+                            <constraint firstAttribute="trailing" secondItem="VN9-uM-klk" secondAttribute="trailing" id="ea1-Bk-J1F"/>
+                            <constraint firstItem="VN9-uM-klk" firstAttribute="leading" secondItem="rDK-3q-pbB" secondAttribute="leading" id="gOU-rS-aUP"/>
+                            <constraint firstItem="VN9-uM-klk" firstAttribute="top" secondItem="OI2-Z8-o6u" secondAttribute="bottom" id="oso-4t-37O"/>
                         </constraints>
                     </view>
-                    <toolbarItems/>
-                    <nil key="simulatedBottomBarMetrics"/>
-                    <connections>
-                        <outlet property="newNoteBody" destination="Hrw-nE-Q9O" id="x7G-sk-bhv"/>
-                        <outlet property="newNoteTitle" destination="c13-tV-pJm" id="V9c-ta-pqV"/>
-=======
-                            <constraint firstItem="P10-SO-5sg" firstAttribute="centerX" secondItem="Hrw-nE-Q9O" secondAttribute="centerX" id="44q-sM-4G3"/>
-                            <constraint firstAttribute="trailing" secondItem="Hrw-nE-Q9O" secondAttribute="trailing" constant="16" id="4mr-rI-oCk"/>
-                            <constraint firstItem="Hrw-nE-Q9O" firstAttribute="top" secondItem="c13-tV-pJm" secondAttribute="bottom" constant="14" id="J4i-N3-g6G"/>
-                            <constraint firstAttribute="trailing" secondItem="c13-tV-pJm" secondAttribute="trailing" constant="16" id="K2d-GY-pYG"/>
-                            <constraint firstItem="Hrw-nE-Q9O" firstAttribute="leading" secondItem="rDK-3q-pbB" secondAttribute="leading" constant="16" id="LBh-rP-ap7"/>
-                            <constraint firstItem="P10-SO-5sg" firstAttribute="centerX" secondItem="c13-tV-pJm" secondAttribute="centerX" id="Lm4-dN-ACY"/>
-                            <constraint firstItem="P10-SO-5sg" firstAttribute="top" secondItem="rDK-3q-pbB" secondAttribute="top" id="Lww-H3-MqR"/>
-                            <constraint firstAttribute="trailing" secondItem="P10-SO-5sg" secondAttribute="trailing" id="TTd-03-ZSX"/>
-                            <constraint firstItem="c13-tV-pJm" firstAttribute="leading" secondItem="rDK-3q-pbB" secondAttribute="leading" constant="16" id="cZz-KF-1mR"/>
-                            <constraint firstItem="c13-tV-pJm" firstAttribute="top" secondItem="P10-SO-5sg" secondAttribute="bottom" constant="22" id="dfO-OC-Ud1"/>
-                            <constraint firstItem="P10-SO-5sg" firstAttribute="leading" secondItem="rDK-3q-pbB" secondAttribute="leading" id="iRZ-us-BBa"/>
-                        </constraints>
-                    </view>
+                    <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
                     <toolbarItems/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="newNoteBody" destination="Hrw-nE-Q9O" id="Vff-bU-Rlk"/>
                         <outlet property="newNoteTitle" destination="c13-tV-pJm" id="bfU-m3-99j"/>
->>>>>>> 8fe142108564ad16492bb36d1fa680171471804f
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="yY3-C8-Qyc" userLabel="First Responder" sceneMemberID="firstResponder"/>

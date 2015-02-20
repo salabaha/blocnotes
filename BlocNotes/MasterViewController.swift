@@ -74,17 +74,10 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
                 controller.navigationItem.leftItemsSupplementBackButton = true
             }
         }
-<<<<<<< HEAD
-        if segue.identifier == "addNote" {
-            // nothing here (for now)
-        }
-    }
-=======
->>>>>>> 8fe142108564ad16492bb36d1fa680171471804f
         
         if segue.identifier == "addNote" {
-            println("segue.identifier is addNote")
-            let controller = (segue.destinationViewController as! UINavigationController).topViewController as! AddNoteViewController
+//            println("segue.identifier is addNote")
+//            let controller = (segue.destinationViewController as! UINavigationController).topViewController as! AddNoteViewController
         }
     }
     

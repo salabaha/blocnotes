@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		553734C21A95FE9F00757DE1 /* AddNoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 553734C11A95FE9F00757DE1 /* AddNoteViewController.swift */; };
+		553734C71A97AB8700757DE1 /* ReadMe.txt in Resources */ = {isa = PBXBuildFile; fileRef = 553734C61A97AB8700757DE1 /* ReadMe.txt */; };
 		558284B51A9525C9004B5082 /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558284B41A9525C9004B5082 /* Note.swift */; };
 		55C7BD061A9521C50086C048 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C7BD051A9521C50086C048 /* AppDelegate.swift */; };
 		55C7BD091A9521C50086C048 /* BlocNotes.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 55C7BD071A9521C50086C048 /* BlocNotes.xcdatamodeld */; };
@@ -31,6 +32,8 @@
 
 /* Begin PBXFileReference section */
 		553734C11A95FE9F00757DE1 /* AddNoteViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddNoteViewController.swift; sourceTree = "<group>"; };
+		553734C51A97AADF00757DE1 /* BlocNotes.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = BlocNotes.entitlements; sourceTree = "<group>"; };
+		553734C61A97AB8700757DE1 /* ReadMe.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ReadMe.txt; sourceTree = "<group>"; };
 		558284B41A9525C9004B5082 /* Note.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Note.swift; sourceTree = "<group>"; };
 		55C7BD001A9521C50086C048 /* BlocNotes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BlocNotes.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		55C7BD041A9521C50086C048 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -87,6 +90,7 @@
 		55C7BCF71A9521C50086C048 = {
 			isa = PBXGroup;
 			children = (
+				553734C61A97AB8700757DE1 /* ReadMe.txt */,
 				55C7BD021A9521C50086C048 /* BlocNotes */,
 				55C7BD1D1A9521C50086C048 /* BlocNotesTests */,
 				55C7BD011A9521C50086C048 /* Products */,
@@ -105,6 +109,7 @@
 		55C7BD021A9521C50086C048 /* BlocNotes */ = {
 			isa = PBXGroup;
 			children = (
+				553734C51A97AADF00757DE1 /* BlocNotes.entitlements */,
 				553734C01A95FE2500757DE1 /* Views */,
 				558284B31A952559004B5082 /* Model */,
 				55C7BD051A9521C50086C048 /* AppDelegate.swift */,
@@ -189,6 +194,12 @@
 				TargetAttributes = {
 					55C7BCFF1A9521C50086C048 = {
 						CreatedOnToolsVersion = 6.3;
+						DevelopmentTeam = A983637AY3;
+						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = {
+								enabled = 1;
+							};
+						};
 					};
 					55C7BD191A9521C50086C048 = {
 						CreatedOnToolsVersion = 6.3;
@@ -222,6 +233,7 @@
 			files = (
 				55C7BD101A9521C50086C048 /* Main.storyboard in Resources */,
 				55C7BD151A9521C50086C048 /* LaunchScreen.xib in Resources */,
+				553734C71A97AB8700757DE1 /* ReadMe.txt in Resources */,
 				55C7BD121A9521C50086C048 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -372,9 +384,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = BlocNotes/BlocNotes.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = BlocNotes/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
@@ -382,9 +398,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = BlocNotes/BlocNotes.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = BlocNotes/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};

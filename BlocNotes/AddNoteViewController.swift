@@ -9,20 +9,31 @@
 import UIKit
 import CoreData
 
-class AddNoteViewController: UIViewController {
+class AddNoteViewController: UIViewController, UITextViewDelegate { // Added a delegate method
     
     // Retreive the managedObjectContext from AppDelegate
     let managedObjectContext = (UIApplication.sharedApplication().delegate as! AppDelegate).managedObjectContext
-
+    
     @IBOutlet weak var newNoteTitle: UITextField!
-    @IBOutlet weak var newNoteBody: UITextField!
-        
+    @IBOutlet weak var newNoteBody: UITextView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        
+        // Set border of UITextView to look like border of UITextField
+        self.newNoteBody.layer.borderWidth = 1.0
+        self.newNoteBody.layer.borderColor = UIColor.lightGrayColor().colorWithAlphaComponent(0.3).CGColor
+        self.newNoteBody.layer.cornerRadius = 5.0
+        
+        newNoteBody.delegate = self
+        if (newNoteBody.text == "") {
+            textViewDidEndEditing(newNoteBody)
+        }
+        var tapDismiss = UITapGestureRecognizer(target: self, action: "dismissKeyboard")
+        self.view.addGestureRecognizer(tapDismiss)
+        
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -37,17 +48,39 @@ class AddNoteViewController: UIViewController {
         newNote.dateEdited = NSDate()
         var error: NSError? = nil
         self.managedObjectContext!.save(&error)
-
+        
         newNoteTitle.text = nil
-        newNoteBody.text = nil        
+        newNoteBody.text = nil
     }
-
+    
+    // MARK: - Placeholder text methods
+    
+    func dismissKeyboard(){
+        newNoteBody.resignFirstResponder()
+    }
+    
+    func textViewDidEndEditing(textView: UITextView) {
+        if (textView.text == "") {
+            textView.text = "Enter note here"
+            textView.textColor = UIColor.lightGrayColor()
+        }
+        textView.resignFirstResponder()
+    }
+    
+    func textViewDidBeginEditing(textView: UITextView){
+        if (textView.text == "Enter note here"){
+            textView.text = ""
+            textView.textColor = UIColor.blackColor()
+        }
+        textView.becomeFirstResponder()
+    }
+    
     // MARK: - Navigation
-
-//    // In a storyboard-based application, you will often want to do a little preparation before navigation
-//    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-//        // Get the new view controller using segue.destinationViewController.
-//        // Pass the selected object to the new view controller.
-//    }
+    
+    //    // In a storyboard-based application, you will often want to do a little preparation before navigation
+    //    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    //        // Get the new view controller using segue.destinationViewController.
+    //        // Pass the selected object to the new view controller.
+    //    }
     
 }

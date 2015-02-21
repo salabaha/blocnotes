@@ -146,6 +146,9 @@
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="C36-xh-Hqc">
                                 <rect key="frame" x="16" y="46" width="568" height="203"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="203" id="nwo-oz-Pft"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
@@ -162,20 +165,15 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="c13-tV-pJm" firstAttribute="leading" secondItem="C36-xh-Hqc" secondAttribute="leading" id="2HB-4G-u62"/>
-                            <constraint firstItem="c13-tV-pJm" firstAttribute="top" secondItem="OI2-Z8-o6u" secondAttribute="bottom" constant="8" symbolic="YES" id="54V-zc-fAx"/>
-                            <constraint firstItem="c13-tV-pJm" firstAttribute="leading" secondItem="rDK-3q-pbB" secondAttribute="leading" constant="16" id="5Wb-jU-iGV"/>
-                            <constraint firstAttribute="trailing" secondItem="Zvd-kW-Xh1" secondAttribute="trailing" id="9A8-fD-2lJ"/>
-                            <constraint firstItem="C36-xh-Hqc" firstAttribute="leading" secondItem="rDK-3q-pbB" secondAttribute="leading" constant="16" id="FSS-xF-ecK"/>
-                            <constraint firstAttribute="trailing" secondItem="C36-xh-Hqc" secondAttribute="trailing" constant="16" id="jGG-KU-4e5"/>
-                            <constraint firstItem="dZ8-ok-tJY" firstAttribute="top" secondItem="C36-xh-Hqc" secondAttribute="bottom" constant="243" id="o03-xo-0Ms"/>
-                            <constraint firstItem="C36-xh-Hqc" firstAttribute="trailing" secondItem="c13-tV-pJm" secondAttribute="trailing" id="oip-mC-5VM"/>
-                            <constraint firstItem="C36-xh-Hqc" firstAttribute="top" secondItem="c13-tV-pJm" secondAttribute="bottom" constant="8" symbolic="YES" id="pMV-Gr-se8"/>
-                            <constraint firstItem="Zvd-kW-Xh1" firstAttribute="leading" secondItem="rDK-3q-pbB" secondAttribute="leading" id="s32-EA-Zmb"/>
-                            <constraint firstItem="dZ8-ok-tJY" firstAttribute="top" secondItem="Zvd-kW-Xh1" secondAttribute="bottom" id="t3a-Ax-YlF"/>
-                            <constraint firstItem="c13-tV-pJm" firstAttribute="trailing" secondItem="rDK-3q-pbB" secondAttribute="trailingMargin" id="tU3-cZ-UAb"/>
-                            <constraint firstItem="c13-tV-pJm" firstAttribute="leading" secondItem="rDK-3q-pbB" secondAttribute="leadingMargin" id="wgM-Vm-lGS"/>
-                            <constraint firstAttribute="trailing" secondItem="c13-tV-pJm" secondAttribute="trailing" constant="16" id="xh2-9u-KXU"/>
+                            <constraint firstItem="C36-xh-Hqc" firstAttribute="leading" secondItem="c13-tV-pJm" secondAttribute="leading" id="D33-LM-SFR"/>
+                            <constraint firstItem="C36-xh-Hqc" firstAttribute="trailing" secondItem="rDK-3q-pbB" secondAttribute="trailingMargin" id="Fge-mK-fQz"/>
+                            <constraint firstItem="c13-tV-pJm" firstAttribute="centerX" secondItem="Zvd-kW-Xh1" secondAttribute="centerX" id="LNu-hn-l94"/>
+                            <constraint firstItem="c13-tV-pJm" firstAttribute="top" secondItem="OI2-Z8-o6u" secondAttribute="bottom" constant="8" symbolic="YES" id="SXN-We-hKm"/>
+                            <constraint firstItem="C36-xh-Hqc" firstAttribute="top" secondItem="c13-tV-pJm" secondAttribute="bottom" constant="8" symbolic="YES" id="UHs-jf-mUk"/>
+                            <constraint firstItem="C36-xh-Hqc" firstAttribute="leading" secondItem="rDK-3q-pbB" secondAttribute="leadingMargin" id="Wbe-11-pLP"/>
+                            <constraint firstItem="Zvd-kW-Xh1" firstAttribute="bottom" secondItem="dZ8-ok-tJY" secondAttribute="top" id="msJ-Xg-SJM"/>
+                            <constraint firstItem="Zvd-kW-Xh1" firstAttribute="leading" secondItem="rDK-3q-pbB" secondAttribute="leading" id="o2v-TK-BDN"/>
+                            <constraint firstItem="C36-xh-Hqc" firstAttribute="centerX" secondItem="Zvd-kW-Xh1" secondAttribute="centerX" id="pnN-9K-bg7"/>
                         </constraints>
                     </view>
                     <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>

@@ -9,7 +9,7 @@
 import UIKit
 import CoreData
 
-class AddNoteViewController: UIViewController, UITextViewDelegate { // Added a delegate method
+class AddNoteViewController: UIViewController, UITextViewDelegate, UIDocumentPickerDelegate { // Added a delegate method
     
     // Retreive the managedObjectContext from AppDelegate
     let managedObjectContext = (UIApplication.sharedApplication().delegate as! AppDelegate).managedObjectContext
@@ -39,6 +39,8 @@ class AddNoteViewController: UIViewController, UITextViewDelegate { // Added a d
         // Dispose of any resources that can be recreated.
     }
     
+    // MARK: - IBAction methods
+    
     @IBAction func addNote(sender: AnyObject) {
         let newNote = NSEntityDescription.insertNewObjectForEntityForName("Note", inManagedObjectContext: self.managedObjectContext!) as! Note
         
@@ -51,6 +53,15 @@ class AddNoteViewController: UIViewController, UITextViewDelegate { // Added a d
         
         newNoteTitle.text = nil
         newNoteBody.text = nil
+    }
+    
+    @IBAction func importItem(sender: UIBarButtonItem) {
+        
+        var documentPicker: UIDocumentPickerViewController = UIDocumentPickerViewController(documentTypes: ["public.text"], inMode: UIDocumentPickerMode.Import)
+        documentPicker.delegate = self
+        documentPicker.modalPresentationStyle = UIModalPresentationStyle.FullScreen
+        self.presentViewController(documentPicker, animated: true, completion: nil)
+        
     }
     
     // MARK: - Placeholder text methods
@@ -75,7 +86,15 @@ class AddNoteViewController: UIViewController, UITextViewDelegate { // Added a d
         textView.becomeFirstResponder()
     }
     
-    // MARK: - UIDocumentPicker Methods
+    // MARK: - UIDocumentPickerDelegate Methods
+    
+    func documentPicker(controller: UIDocumentPickerViewController, didPickDocumentAtURL url: NSURL) {
+        if controller.documentPickerMode == UIDocumentPickerMode.Import {
+            // This is what it should be
+            self.newNoteBody.text = String(contentsOfFile: url.path!)
+        }
+    }
+    
     
     // MARK: - Navigation
     

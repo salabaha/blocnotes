@@ -19,17 +19,8 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     var searchController: UISearchController!
     var searchPredicate: NSPredicate? // I added this. It's optional on and gets set later
     
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        if UIDevice.currentDevice().userInterfaceIdiom == .Pad {
-            self.clearsSelectionOnViewWillAppear = false
-            self.preferredContentSize = CGSize(width: 320.0, height: 600.0)
-        }
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
         
         self.navigationItem.leftBarButtonItem = self.editButtonItem()
         
@@ -43,13 +34,11 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         // UISearchController setup
         searchController = UISearchController(searchResultsController: nil)
         searchController.dimsBackgroundDuringPresentation = false
-        searchController.searchResultsUpdater = self // generates a compiler error. Commenter says it's redundant
+        searchController.searchResultsUpdater = self
         searchController.searchBar.sizeToFit()
         self.tableView.tableHeaderView = searchController?.searchBar
         self.tableView.delegate = self
         self.definesPresentationContext = true
-        
-        
     }
     
     override func didReceiveMemoryWarning() {
@@ -76,11 +65,11 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         }
     }
     
-    // TODO: Added this, need need to figure out why it's not 'seeing' the predicate
-    // should I declare a predicate variable at the top to shut the compiler up?
+    // MARK: - UISearchResultsUpdating Delegate Method
+    // Called when the search bar's text or scope has changed or when the search bar becomes first responder.
     func updateSearchResultsForSearchController(searchController: UISearchController) {
         let searchText = self.searchController?.searchBar.text // steve put breakpoint
-        println("updateSearchResultsForSearchController")
+        println(searchController.searchBar.text)
         if let searchText = searchText {
             searchPredicate = NSPredicate(format: "noteBody contains[c] %@", searchText)
             self.tableView.reloadData()
@@ -135,16 +124,33 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == .Delete {
+            var note: Note
+            if searchPredicate == nil {
+                note = self.fetchedResultsController.objectAtIndexPath(indexPath) as! Note
+            } else {
+                let filteredObjects = self.fetchedResultsController.fetchedObjects?.filter() {
+                    return self.searchPredicate!.evaluateWithObject($0)
+                }
+                note = filteredObjects![indexPath.row] as! Note
+            }
             let context = self.fetchedResultsController.managedObjectContext
-            context.deleteObject(self.fetchedResultsController.objectAtIndexPath(indexPath) as! NSManagedObject)
+            context.deleteObject(note)
             
             var error: NSError? = nil
             if !context.save(&error) {
-                // Replace this implementation with code to handle the error appropriately.
-                // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                //println("Unresolved error \(error), \(error.userInfo)")
                 abort()
             }
+            
+            //            let context = self.fetchedResultsController.managedObjectContext
+            //            context.deleteObject(self.fetchedResultsController.objectAtIndexPath(indexPath) as! NSManagedObject)
+            //
+            //            var error: NSError? = nil
+            //            if !context.save(&error) {
+            //                // Replace this implementation with code to handle the error appropriately.
+            //                // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+            //                //println("Unresolved error \(error), \(error.userInfo)")
+            //                abort()
+            //            }
         }
     }
     
@@ -169,6 +175,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         fetchRequest.fetchBatchSize = 20
         
         // Edit the sort key as appropriate.
+        // TODO: change to match code here
         let sortDescriptor = NSSortDescriptor(key: "noteTitle", ascending: false)
         let sortDescriptors = [sortDescriptor]
         
@@ -194,23 +201,27 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     
     func controllerWillChangeContent(controller: NSFetchedResultsController) {
         //        self.tableView.beginUpdates() // ** original code, change if doesn't work** steve put breakpoint here
+        
+        // ANSWER said this section is redundant
         if searchPredicate == nil {
             tableView.beginUpdates()
         } else {
             (searchController.searchResultsUpdater as! MasterViewController).tableView.beginUpdates()
         }
-        
-        func controller(controller: NSFetchedResultsController, didChangeSection sectionInfo: NSFetchedResultsSectionInfo, atIndex sectionIndex: Int, forChangeType type: NSFetchedResultsChangeType) {
-            switch type {
-            case .Insert:
-                self.tableView.insertSections(NSIndexSet(index: sectionIndex), withRowAnimation: .Fade)
-            case .Delete:
-                self.tableView.deleteSections(NSIndexSet(index: sectionIndex), withRowAnimation: .Fade)
-            default:
-                return
-            }
+        tableView.beginUpdates()
+    }
+    
+    func controller(controller: NSFetchedResultsController, didChangeSection sectionInfo: NSFetchedResultsSectionInfo, atIndex sectionIndex: Int, forChangeType type: NSFetchedResultsChangeType) {
+        switch type {
+        case .Insert:
+            self.tableView.insertSections(NSIndexSet(index: sectionIndex), withRowAnimation: .Fade)
+        case .Delete:
+            self.tableView.deleteSections(NSIndexSet(index: sectionIndex), withRowAnimation: .Fade)
+        default:
+            return
         }
     }
+    
     
     func controller(controller: NSFetchedResultsController, didChangeObject anObject: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
         var tableView = UITableView()
@@ -233,19 +244,17 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
             // TODO: need fix this
             
             // ORIGINAL CODE
-            self.configureCell(tableView.cellForRowAtIndexPath(indexPath!)!, atIndexPath: indexPath!) // original code
+            // self.configureCell(tableView.cellForRowAtIndexPath(indexPath!)!, atIndexPath: indexPath!) // original code
             
-//            // PROSPECTIVE SOLUTION CODE
-//            println("*** NSFetchedResultsChangeUpdate (object)")
-//            if searchPredicate == nil {
-//                let cell = tableView.cellForRowAtIndexPath(indexPath) as LocationCell
-//                let location = controller.objectAtIndexPath(indexPath) as Location
-//                cell.configureForLocation(location)
-//            } else {
-//                let cell = tableView.cellForRowAtIndexPath(searchIndexPath) as LocationCell
-//                let location = controller.objectAtIndexPath(searchIndexPath) as Location
-//                cell.configureForLocation(location)
-//            }
+            // PROSPECTIVE SOLUTION CODE
+            println("*** NSFetchedResultsChangeUpdate (object)")
+            if searchPredicate == nil {
+                self.configureCell(tableView.cellForRowAtIndexPath(indexPath!)!, atIndexPath: indexPath!) // original code
+            } else {
+                //                let cell = tableView.cellForRowAtIndexPath(searchIndexPath) as LocationCell
+                //                let location = controller.objectAtIndexPath(searchIndexPath) as Location
+                //                cell.configureForLocation(location)
+            }
             
         case .Move:
             println("*** NSFetchedResultsChangeMove (object)")
@@ -259,20 +268,15 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     
     
     func controllerDidChangeContent(controller: NSFetchedResultsController) {
-        //        if ((searchController.searchBar.text) != nil) { // steve put breakpoint here
-        //            // If the search is active, do this
-        //            searchDisplayController!.searchResultsTableView.endUpdates()
-        //        } else {
-        //            // else it isn't active, do this
-        //            self.tableView.endUpdates()
-        //        }
         if self.searchPredicate == nil {
             self.tableView.endUpdates()
         } else {
+            println("controllerDidChangeContent")
             (self.searchController.searchResultsUpdater as! MasterViewController).tableView.endUpdates()
         }
         
     }
+    
     
     /*
     // Implementing the above methods to update the table view in response to individual changes may have performance implications if a large number of changes are made simultaneously. If this proves to be an issue, you can instead just implement controllerDidChangeContent: which notifies the delegate that all section and object changes have been processed.

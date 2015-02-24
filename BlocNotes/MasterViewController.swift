@@ -9,11 +9,16 @@
 import UIKit
 import CoreData
 
-class MasterViewController: UITableViewController, NSFetchedResultsControllerDelegate {
+class MasterViewController: UITableViewController, NSFetchedResultsControllerDelegate, UISearchControllerDelegate {
     
     var detailViewController: DetailViewController? = nil
     var addNoteViewController:AddNoteViewController? = nil  // I added this
     var managedObjectContext: NSManagedObjectContext? = nil
+    
+    // Added variable for UISearchController & searchBar
+    
+    @IBOutlet weak var searchBar: UISearchBar!
+    var searchController: UISearchController!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -35,6 +40,16 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
             let entity = self.fetchedResultsController.fetchRequest.entity!
             self.detailViewController = controllers[controllers.count-1].topViewController as? DetailViewController
         }
+        
+        // UISearchController setup
+        searchController = UISearchController(searchResultsController: nil)
+        searchController.dimsBackgroundDuringPresentation = false
+//        searchController.searchResultsUpdater = self // generates a compiler error. Commenter says it's redundant
+        searchController.searchBar.sizeToFit()
+        self.tableView.tableHeaderView = searchController?.searchBar
+        self.tableView.delegate = self
+        self.definesPresentationContext = true
+        
         
     }
     
@@ -59,6 +74,16 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
             // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
             println("Unresolved error \(error), \(error?.userInfo)")
             abort()
+        }
+    }
+    
+    // TODO: Added this, need need to figure out why it's not 'seeing' the predicate
+    // should I declare a predicate variable at the top to shut the compiler up?
+    func updateSearchResultsForSearchController(searchController: UISearchController) {
+        let searchText = self.searchController?.searchBar.text
+        if let searchText = searchText {
+            searchPredicate = searchText.isEmpty ? nil : NSPredicate(format: "noteBody contains[c] %@", searchText)
+            self.tableView.reloadData()
         }
     }
     
@@ -194,7 +219,13 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     }
     
     func controllerDidChangeContent(controller: NSFetchedResultsController) {
-        self.tableView.endUpdates()
+        if ((searchBar.text) != nil) {
+            // If the search is active, do this
+            searchDisplayController!.searchResultsTableView.endUpdates()
+        } else {
+            // else it isn't active, do this
+            self.tableView.endUpdates()
+        }
     }
     
     /*

@@ -22,3 +22,6 @@ Replace textField w/ textView in AddNoteVC
 
 Search bar info
 http://useyourloaf.com/blog/2015/02/16/updating-to-the-ios-8-search-controller.html?utm_campaign=iOS_Dev_Weekly_Issue_186&utm_medium=email&utm_source=iOS%252BDev%252BWeekly
+
+Using this as a model for what to do:
+http://stackoverflow.com/questions/27656678/deleting-from-uisearchcontrollers-filtered-search-results

@@ -17,7 +17,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     
     // Added variable for UISearchController & searchBar
     
-    @IBOutlet weak var searchBar: UISearchBar!
+    var searchBar: UISearchBar!
     var searchController: UISearchController!
     
     override func awakeFromNib() {
@@ -29,6 +29,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     }
     
     override func viewDidLoad() {
+        printSearchBar()
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
@@ -82,7 +83,8 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     func updateSearchResultsForSearchController(searchController: UISearchController) {
         let searchText = self.searchController?.searchBar.text
         if let searchText = searchText {
-            searchPredicate = searchText.isEmpty ? nil : NSPredicate(format: "noteBody contains[c] %@", searchText)
+            let searchPredicate = NSPredicate(format: "noteBody contains[c] %@", searchText)
+//            var searchPredicate = searchText.isEmpty ? nil : predicateWithFormat("noteBody contains[c] %@", searchText)
             self.tableView.reloadData()
         }
     }
@@ -225,6 +227,13 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         } else {
             // else it isn't active, do this
             self.tableView.endUpdates()
+        }
+    }
+    
+//    TODO: mucking around, delete later?
+    func printSearchBar() {
+        if let text = searchBar.text  {
+            println(searchBar.text)
         }
     }
     

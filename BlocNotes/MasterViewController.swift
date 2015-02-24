@@ -9,16 +9,15 @@
 import UIKit
 import CoreData
 
-class MasterViewController: UITableViewController, NSFetchedResultsControllerDelegate, UISearchControllerDelegate {
+class MasterViewController: UITableViewController, NSFetchedResultsControllerDelegate, UISearchControllerDelegate, UISearchResultsUpdating {
     
     var detailViewController: DetailViewController? = nil
     var addNoteViewController:AddNoteViewController? = nil  // I added this
     var managedObjectContext: NSManagedObjectContext? = nil
     
-    // Added variable for UISearchController & searchBar
-    
-    var searchBar: UISearchBar!
+    // Added variable for UISearchController
     var searchController: UISearchController!
+    var searchPredicate: NSPredicate? // I added this. It's optional on and gets set later
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -29,7 +28,6 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     }
     
     override func viewDidLoad() {
-        printSearchBar()
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
@@ -45,7 +43,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         // UISearchController setup
         searchController = UISearchController(searchResultsController: nil)
         searchController.dimsBackgroundDuringPresentation = false
-//        searchController.searchResultsUpdater = self // generates a compiler error. Commenter says it's redundant
+        searchController.searchResultsUpdater = self // generates a compiler error. Commenter says it's redundant
         searchController.searchBar.sizeToFit()
         self.tableView.tableHeaderView = searchController?.searchBar
         self.tableView.delegate = self
@@ -81,10 +79,10 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     // TODO: Added this, need need to figure out why it's not 'seeing' the predicate
     // should I declare a predicate variable at the top to shut the compiler up?
     func updateSearchResultsForSearchController(searchController: UISearchController) {
-        let searchText = self.searchController?.searchBar.text
+        let searchText = self.searchController?.searchBar.text // steve put breakpoint
+        println("updateSearchResultsForSearchController")
         if let searchText = searchText {
-            let searchPredicate = NSPredicate(format: "noteBody contains[c] %@", searchText)
-//            var searchPredicate = searchText.isEmpty ? nil : predicateWithFormat("noteBody contains[c] %@", searchText)
+            searchPredicate = NSPredicate(format: "noteBody contains[c] %@", searchText)
             self.tableView.reloadData()
         }
     }
@@ -103,8 +101,8 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         }
         
         if segue.identifier == "addNote" {
-//            println("segue.identifier is addNote")
-//            let controller = (segue.destinationViewController as! UINavigationController).topViewController as! AddNoteViewController
+            //            println("segue.identifier is addNote")
+            //            let controller = (segue.destinationViewController as! UINavigationController).topViewController as! AddNoteViewController
         }
     }
     
@@ -115,6 +113,11 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if self.searchPredicate == nil {
+            let sectionInfo = self.fetchedResultsController.sections![section] as! NSFetchedResultsSectionInfo
+            return sectionInfo.numberOfObjects
+        }
+        
         let sectionInfo = self.fetchedResultsController.sections![section] as! NSFetchedResultsSectionInfo
         return sectionInfo.numberOfObjects
     }
@@ -190,29 +193,62 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     var _fetchedResultsController: NSFetchedResultsController? = nil
     
     func controllerWillChangeContent(controller: NSFetchedResultsController) {
-        self.tableView.beginUpdates()
-    }
-    
-    func controller(controller: NSFetchedResultsController, didChangeSection sectionInfo: NSFetchedResultsSectionInfo, atIndex sectionIndex: Int, forChangeType type: NSFetchedResultsChangeType) {
-        switch type {
-        case .Insert:
-            self.tableView.insertSections(NSIndexSet(index: sectionIndex), withRowAnimation: .Fade)
-        case .Delete:
-            self.tableView.deleteSections(NSIndexSet(index: sectionIndex), withRowAnimation: .Fade)
-        default:
-            return
+        //        self.tableView.beginUpdates() // ** original code, change if doesn't work** steve put breakpoint here
+        if searchPredicate == nil {
+            tableView.beginUpdates()
+        } else {
+            (searchController.searchResultsUpdater as! MasterViewController).tableView.beginUpdates()
+        }
+        
+        func controller(controller: NSFetchedResultsController, didChangeSection sectionInfo: NSFetchedResultsSectionInfo, atIndex sectionIndex: Int, forChangeType type: NSFetchedResultsChangeType) {
+            switch type {
+            case .Insert:
+                self.tableView.insertSections(NSIndexSet(index: sectionIndex), withRowAnimation: .Fade)
+            case .Delete:
+                self.tableView.deleteSections(NSIndexSet(index: sectionIndex), withRowAnimation: .Fade)
+            default:
+                return
+            }
         }
     }
     
     func controller(controller: NSFetchedResultsController, didChangeObject anObject: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
+        var tableView = UITableView()
+        
+        if self.searchPredicate == nil {
+            tableView = self.tableView
+        } else {
+            tableView = (self.searchController.searchResultsUpdater as! MasterViewController).tableView
+        }
+        
         switch type {
         case .Insert:
+            println("*** NSFetchedResultsChangeInsert (object)")
             tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Fade)
         case .Delete:
+            println("*** NSFetchedResultsChangeDelete (object)")
             tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Fade)
         case .Update:
-            self.configureCell(tableView.cellForRowAtIndexPath(indexPath!)!, atIndexPath: indexPath!)
+            println("*** NSFetchedResultsChangeUpdate (object)")
+            // TODO: need fix this
+            
+            // ORIGINAL CODE
+            self.configureCell(tableView.cellForRowAtIndexPath(indexPath!)!, atIndexPath: indexPath!) // original code
+            
+//            // PROSPECTIVE SOLUTION CODE
+//            println("*** NSFetchedResultsChangeUpdate (object)")
+//            if searchPredicate == nil {
+//                let cell = tableView.cellForRowAtIndexPath(indexPath) as LocationCell
+//                let location = controller.objectAtIndexPath(indexPath) as Location
+//                cell.configureForLocation(location)
+//            } else {
+//                let cell = tableView.cellForRowAtIndexPath(searchIndexPath) as LocationCell
+//                let location = controller.objectAtIndexPath(searchIndexPath) as Location
+//                cell.configureForLocation(location)
+//            }
+            
         case .Move:
+            println("*** NSFetchedResultsChangeMove (object)")
             tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Fade)
             tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Fade)
         default:
@@ -220,21 +256,22 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         }
     }
     
-    func controllerDidChangeContent(controller: NSFetchedResultsController) {
-        if ((searchBar.text) != nil) {
-            // If the search is active, do this
-            searchDisplayController!.searchResultsTableView.endUpdates()
-        } else {
-            // else it isn't active, do this
-            self.tableView.endUpdates()
-        }
-    }
     
-//    TODO: mucking around, delete later?
-    func printSearchBar() {
-        if let text = searchBar.text  {
-            println(searchBar.text)
+    
+    func controllerDidChangeContent(controller: NSFetchedResultsController) {
+        //        if ((searchController.searchBar.text) != nil) { // steve put breakpoint here
+        //            // If the search is active, do this
+        //            searchDisplayController!.searchResultsTableView.endUpdates()
+        //        } else {
+        //            // else it isn't active, do this
+        //            self.tableView.endUpdates()
+        //        }
+        if self.searchPredicate == nil {
+            self.tableView.endUpdates()
+        } else {
+            (self.searchController.searchResultsUpdater as! MasterViewController).tableView.endUpdates()
         }
+        
     }
     
     /*

@@ -9,7 +9,7 @@
 import UIKit
 import CoreData
 
-class MasterViewController: UITableViewController, NSFetchedResultsControllerDelegate, UISearchControllerDelegate, UISearchResultsUpdating {
+class MasterViewController: UITableViewController, NSFetchedResultsControllerDelegate, UISearchControllerDelegate, UISearchResultsUpdating, UISearchBarDelegate {
     
     var detailViewController: DetailViewController? = nil
     var addNoteViewController:AddNoteViewController? = nil  // I added this
@@ -18,6 +18,8 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     // Added variable for UISearchController
     var searchController: UISearchController!
     var searchPredicate: NSPredicate? // I added this. It's optional on and gets set later
+    var filteredObjects : [Note]? = nil /// Added this, per StackOverflow
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,8 +35,10 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         
         // UISearchController setup
         searchController = UISearchController(searchResultsController: nil)
-        searchController.dimsBackgroundDuringPresentation = false
         searchController.searchResultsUpdater = self
+        searchController.dimsBackgroundDuringPresentation = false
+        searchController.searchResultsUpdater = self    // StackOverflow suggestion
+        searchController.delegate = self                // StackOverflow suggestion
         searchController.searchBar.sizeToFit()
         self.tableView.tableHeaderView = searchController?.searchBar
         self.tableView.delegate = self
@@ -64,10 +68,22 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     // MARK: - UISearchResultsUpdating Delegate Method
     // Called when the search bar's text or scope has changed or when the search bar becomes first responder.
     func updateSearchResultsForSearchController(searchController: UISearchController) {
+        // Code before StackOverflow changes
+//        let searchText = self.searchController?.searchBar.text // steve put breakpoint
+//        println(searchController.searchBar.text)
+//        if let searchText = searchText {
+//            searchPredicate = NSPredicate(format: "noteBody contains[c] %@", searchText)
+//            self.tableView.reloadData()
+//            println(searchPredicate)
+//        }
         let searchText = self.searchController?.searchBar.text // steve put breakpoint
         println(searchController.searchBar.text)
         if let searchText = searchText {
             searchPredicate = NSPredicate(format: "noteBody contains[c] %@", searchText)
+            // Added from StackOverflow recommendation
+            filteredObjects = self.fetchedResultsController.fetchedObjects?.filter() {
+                return self.searchPredicate!.evaluateWithObject($0)
+                } as! [Note]?
             self.tableView.reloadData()
             println(searchPredicate)
         }
@@ -95,23 +111,44 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     // MARK: - Table View
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return self.fetchedResultsController.sections?.count ?? 0
+//        return self.fetchedResultsController.sections?.count ?? 0
+        // Added from StackOverflow comment
+        if searchPredicate == nil {
+            return self.fetchedResultsController.sections?.count ?? 0
+        } else {
+            return 1
+        }
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+//        if self.searchPredicate == nil {
+//            let sectionInfo = self.fetchedResultsController.sections![section] as! NSFetchedResultsSectionInfo
+//            return sectionInfo.numberOfObjects
+//        }
+//        
+//        let sectionInfo = self.fetchedResultsController.sections![section] as! NSFetchedResultsSectionInfo
+//        return sectionInfo.numberOfObjects
         if self.searchPredicate == nil {
             let sectionInfo = self.fetchedResultsController.sections![section] as! NSFetchedResultsSectionInfo
             return sectionInfo.numberOfObjects
+        } else {
+            return filteredObjects?.count ?? 0
         }
-        
-        let sectionInfo = self.fetchedResultsController.sections![section] as! NSFetchedResultsSectionInfo
-        return sectionInfo.numberOfObjects
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        // Original code
+//        let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as! UITableViewCell
+//        self.configureCell(cell, atIndexPath: indexPath)
+//        return cell
         let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as! UITableViewCell
-        self.configureCell(cell, atIndexPath: indexPath)
-        return cell
+        if searchPredicate == nil {
+            self.configureCell(cell, atIndexPath: indexPath)
+            return cell
+        } else {
+            // configure the cell based on filteredObjects data
+            return cell
+        }
     }
     
     override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
@@ -186,7 +223,6 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     var _fetchedResultsController: NSFetchedResultsController? = nil
     
     func controllerWillChangeContent(controller: NSFetchedResultsController) {
-        //        self.tableView.beginUpdates() // ** original code, change if doesn't work** steve put breakpoint here
         // ANSWER said this section is redundant, but keeping it b/c it doesn't crash
         if searchPredicate == nil {
             tableView.beginUpdates()
@@ -246,9 +282,10 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
             } else {
                 // Should search the do something w/ the UISearchControllerDelegate or UISearchResultsUpdating
                 // Instead of "indexPath", it should be "searchIndexPath"--How?
-                let cell = tableView.cellForRowAtIndexPath(searchIndexPath) as LocationCell // My cell is a vanilla cell, not a xib
-                let location = controller.objectAtIndexPath(searchIndexPath) as Location // My object is a "Note"
-                cell.configureForLocation(location) // This is from the other guy's code, don't think it's applicable to me
+                //                let cell = tableView.cellForRowAtIndexPath(searchIndexPath) // My cell is a vanilla cell, not a xib
+                //                let location = controller.objectAtIndexPath(searchIndexPath) as Location // My object is a "Note"
+                //                cell.configureForLocation(location) // This is from the other guy's code, don't think it's applicable to me
+                self.configureCell(tableView.cellForRowAtIndexPath(indexPath!)!, atIndexPath: indexPath!) // original code
             }
             
         case .Move:
@@ -272,15 +309,17 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         
     }
     
+    // MARK: - UISearchBar Delegate methods
+    // added this per useyourloaf.com article. doesn't change anything on a standalone basis
     
-    /*
-    // Implementing the above methods to update the table view in response to individual changes may have performance implications if a large number of changes are made simultaneously. If this proves to be an issue, you can instead just implement controllerDidChangeContent: which notifies the delegate that all section and object changes have been processed.
-    
-    func controllerDidChangeContent(controller: NSFetchedResultsController) {
-    // In the simplest, most efficient, case, reload the table view.
-    self.tableView.reloadData()
+    func searchBar(searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
+        updateSearchResultsForSearchController(self.searchController)
     }
-    */
     
+    func didDismissSearchController(searchController: UISearchController) {
+        println("didDismissSearchController")
+        self.searchPredicate = nil
+        self.tableView.reloadData()
+    }
 }
 

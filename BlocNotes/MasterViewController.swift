@@ -51,10 +51,6 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         let entity = self.fetchedResultsController.fetchRequest.entity!
         let newManagedObject = NSEntityDescription.insertNewObjectForEntityForName(entity.name!, inManagedObjectContext: context) as! NSManagedObject
         
-        // If appropriate, configure the new managed object.
-        // Normally you should use accessor methods, but using KVC here avoids the need to add a custom class to the template.
-        //        newManagedObject.setValue(NSString(), forKey: "noteTitle")
-        
         // Save the context.
         var error: NSError? = nil
         if !context.save(&error) {
@@ -73,6 +69,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         if let searchText = searchText {
             searchPredicate = NSPredicate(format: "noteBody contains[c] %@", searchText)
             self.tableView.reloadData()
+            println(searchPredicate)
         }
     }
     
@@ -140,17 +137,6 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
             if !context.save(&error) {
                 abort()
             }
-            
-            //            let context = self.fetchedResultsController.managedObjectContext
-            //            context.deleteObject(self.fetchedResultsController.objectAtIndexPath(indexPath) as! NSManagedObject)
-            //
-            //            var error: NSError? = nil
-            //            if !context.save(&error) {
-            //                // Replace this implementation with code to handle the error appropriately.
-            //                // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-            //                //println("Unresolved error \(error), \(error.userInfo)")
-            //                abort()
-            //            }
         }
     }
     
@@ -175,7 +161,6 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         fetchRequest.fetchBatchSize = 20
         
         // Edit the sort key as appropriate.
-        // TODO: change to match code here
         let sortDescriptor = NSSortDescriptor(key: "noteTitle", ascending: false)
         let sortDescriptors = [sortDescriptor]
         
@@ -197,21 +182,28 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         
         return _fetchedResultsController!
     }
+    
     var _fetchedResultsController: NSFetchedResultsController? = nil
     
     func controllerWillChangeContent(controller: NSFetchedResultsController) {
         //        self.tableView.beginUpdates() // ** original code, change if doesn't work** steve put breakpoint here
-        
-        // ANSWER said this section is redundant
+        // ANSWER said this section is redundant, but keeping it b/c it doesn't crash
         if searchPredicate == nil {
             tableView.beginUpdates()
         } else {
             (searchController.searchResultsUpdater as! MasterViewController).tableView.beginUpdates()
         }
-        tableView.beginUpdates()
     }
     
     func controller(controller: NSFetchedResultsController, didChangeSection sectionInfo: NSFetchedResultsSectionInfo, atIndex sectionIndex: Int, forChangeType type: NSFetchedResultsChangeType) {
+        
+        var tableView = UITableView()
+        if searchPredicate == nil {
+            tableView = self.tableView
+        } else {
+            tableView = (searchController.searchResultsUpdater as! MasterViewController).tableView
+        }
+        
         switch type {
         case .Insert:
             self.tableView.insertSections(NSIndexSet(index: sectionIndex), withRowAnimation: .Fade)
@@ -224,6 +216,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     
     
     func controller(controller: NSFetchedResultsController, didChangeObject anObject: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
+        
         var tableView = UITableView()
         
         if self.searchPredicate == nil {
@@ -251,9 +244,11 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
             if searchPredicate == nil {
                 self.configureCell(tableView.cellForRowAtIndexPath(indexPath!)!, atIndexPath: indexPath!) // original code
             } else {
-                //                let cell = tableView.cellForRowAtIndexPath(searchIndexPath) as LocationCell
-                //                let location = controller.objectAtIndexPath(searchIndexPath) as Location
-                //                cell.configureForLocation(location)
+                // Should search the do something w/ the UISearchControllerDelegate or UISearchResultsUpdating
+                // Instead of "indexPath", it should be "searchIndexPath"--How?
+                let cell = tableView.cellForRowAtIndexPath(searchIndexPath) as LocationCell // My cell is a vanilla cell, not a xib
+                let location = controller.objectAtIndexPath(searchIndexPath) as Location // My object is a "Note"
+                cell.configureForLocation(location) // This is from the other guy's code, don't think it's applicable to me
             }
             
         case .Move:

@@ -10,7 +10,8 @@ import UIKit
 
 class DetailViewController: UIViewController {
     
-    @IBOutlet weak var detailDescriptionLabel: UILabel!
+    @IBOutlet weak var noteTitle: UITextField!
+    @IBOutlet weak var detailDescriptionLabel: UITextView!
     
     
     var detailItem: AnyObject? {
@@ -25,6 +26,9 @@ class DetailViewController: UIViewController {
         if let detail: AnyObject = self.detailItem {
             if let label = self.detailDescriptionLabel {
                 label.text = detail.valueForKey("noteBody")!.description
+            }
+            if let title = self.noteTitle {
+                title.text = detail.valueForKey("noteTitle")!.description
             }
         }
     }

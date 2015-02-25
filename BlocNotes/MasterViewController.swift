@@ -80,6 +80,8 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         println(searchController.searchBar.text)
         if let searchText = searchText {
             searchPredicate = NSPredicate(format: "noteBody contains[c] %@", searchText)
+
+
             // Added from StackOverflow recommendation
             filteredObjects = self.fetchedResultsController.fetchedObjects?.filter() {
                 return self.searchPredicate!.evaluateWithObject($0)
@@ -136,6 +138,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         }
     }
     
+    // Problem in here?
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         // Original code
 //        let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as! UITableViewCell
@@ -205,7 +208,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         
         // Edit the section name key path and cache name if appropriate.
         // nil for section name key path means "no sections".
-        let aFetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: self.managedObjectContext!, sectionNameKeyPath: nil, cacheName: "Master")
+        let aFetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: self.managedObjectContext!, sectionNameKeyPath: nil, cacheName: "Master") // problem?
         aFetchedResultsController.delegate = self
         _fetchedResultsController = aFetchedResultsController
         
@@ -270,11 +273,11 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
             tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Fade)
         case .Update:
             println("*** NSFetchedResultsChangeUpdate (object)")
-            // TODO: need fix this
-            
             // ORIGINAL CODE
             // self.configureCell(tableView.cellForRowAtIndexPath(indexPath!)!, atIndexPath: indexPath!) // original code
             
+            
+            // TODO: Steve thinks the problem lives here
             // PROSPECTIVE SOLUTION CODE
             println("*** NSFetchedResultsChangeUpdate (object)")
             if searchPredicate == nil {
@@ -319,6 +322,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     func didDismissSearchController(searchController: UISearchController) {
         println("didDismissSearchController")
         self.searchPredicate = nil
+        self.filteredObjects = nil
         self.tableView.reloadData()
     }
 }

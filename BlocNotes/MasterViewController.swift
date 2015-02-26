@@ -19,7 +19,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     var searchController: UISearchController!
     var searchPredicate: NSPredicate? // I added this. It's optional on and gets set later
     var filteredObjects : [Note]? = nil /// Added this, per StackOverflow
-
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -68,20 +68,11 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     // MARK: - UISearchResultsUpdating Delegate Method
     // Called when the search bar's text or scope has changed or when the search bar becomes first responder.
     func updateSearchResultsForSearchController(searchController: UISearchController) {
-        // Code before StackOverflow changes
-//        let searchText = self.searchController?.searchBar.text // steve put breakpoint
-//        println(searchController.searchBar.text)
-//        if let searchText = searchText {
-//            searchPredicate = NSPredicate(format: "noteBody contains[c] %@", searchText)
-//            self.tableView.reloadData()
-//            println(searchPredicate)
-//        }
         let searchText = self.searchController?.searchBar.text // steve put breakpoint
         println(searchController.searchBar.text)
         if let searchText = searchText {
-            searchPredicate = NSPredicate(format: "noteBody contains[c] %@", searchText)
-
-
+            searchPredicate = NSPredicate(format: "noteBody contains[c] %@ OR noteTitle contains[c] %@", searchText)
+            
             // Added from StackOverflow recommendation
             filteredObjects = self.fetchedResultsController.fetchedObjects?.filter() {
                 return self.searchPredicate!.evaluateWithObject($0)
@@ -105,15 +96,15 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         }
         
         if segue.identifier == "addNote" {
-            //            println("segue.identifier is addNote")
-            //            let controller = (segue.destinationViewController as! UINavigationController).topViewController as! AddNoteViewController
+            println("segue.identifier is addNote")
+            let controller = (segue.destinationViewController as! UINavigationController).topViewController as! AddNoteViewController
         }
     }
     
     // MARK: - Table View
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-//        return self.fetchedResultsController.sections?.count ?? 0
+        //        return self.fetchedResultsController.sections?.count ?? 0
         // Added from StackOverflow comment
         if searchPredicate == nil {
             return self.fetchedResultsController.sections?.count ?? 0
@@ -123,13 +114,13 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        if self.searchPredicate == nil {
-//            let sectionInfo = self.fetchedResultsController.sections![section] as! NSFetchedResultsSectionInfo
-//            return sectionInfo.numberOfObjects
-//        }
-//        
-//        let sectionInfo = self.fetchedResultsController.sections![section] as! NSFetchedResultsSectionInfo
-//        return sectionInfo.numberOfObjects
+        //        if self.searchPredicate == nil {
+        //            let sectionInfo = self.fetchedResultsController.sections![section] as! NSFetchedResultsSectionInfo
+        //            return sectionInfo.numberOfObjects
+        //        }
+        //
+        //        let sectionInfo = self.fetchedResultsController.sections![section] as! NSFetchedResultsSectionInfo
+        //        return sectionInfo.numberOfObjects
         if self.searchPredicate == nil {
             let sectionInfo = self.fetchedResultsController.sections![section] as! NSFetchedResultsSectionInfo
             return sectionInfo.numberOfObjects
@@ -141,15 +132,16 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     // Problem in here?
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         // Original code
-//        let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as! UITableViewCell
-//        self.configureCell(cell, atIndexPath: indexPath)
-//        return cell
+        //        let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as! UITableViewCell
+        //        self.configureCell(cell, atIndexPath: indexPath)
+        //        return cell
         let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as! UITableViewCell
         if searchPredicate == nil {
             self.configureCell(cell, atIndexPath: indexPath)
             return cell
         } else {
             // configure the cell based on filteredObjects data
+            cell.textLabel!.text = "Test title"
             return cell
         }
     }
@@ -324,6 +316,16 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         self.searchPredicate = nil
         self.filteredObjects = nil
         self.tableView.reloadData()
+    }
+    
+    // MARK: - UISearchControllerDelegate
+    
+    func presentSearchController(searchController: UISearchController) {
+        println("presentSearchController")
+    }
+    
+    func willPresentSearchController(searchController: UISearchController) {
+        println("willPresentSearchController")
     }
 }
 

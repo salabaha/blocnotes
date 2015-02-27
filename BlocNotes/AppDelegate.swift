@@ -131,14 +131,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
             let iCloudLogsDirectoryName = "Logs"
             let fileManager = NSFileManager.defaultManager()
             let localStore: NSURL = self.applicationDocumentsDirectory.URLByAppendingPathComponent(dataFileName)
-            let iCloud: NSURL = fileManager.URLForUbiquityContainerIdentifier(nil)!
+            var iCloud: NSURL = fileManager.URLForUbiquityContainerIdentifier(nil)!
             
-            // TODO: having trouble "swiftifying" this line
-            if (iCloud) {
-                println("iCloud is working!")
-            } else {
-                println("iCloud is NOT working!")
-            }
+//            // TODO: having trouble "swiftifying" this line
+//            if (self.iCloud: NSURL != nil) {
+//                println("iCloud is working!")
+//            } else {
+//                println("iCloud is NOT working!")
+//            }
             
         })
         

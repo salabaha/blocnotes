@@ -71,7 +71,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         let searchText = self.searchController?.searchBar.text // steve put breakpoint
         println(searchController.searchBar.text)
         if let searchText = searchText {
-            searchPredicate = NSPredicate(format: "noteBody contains[c] %@ OR noteTitle contains[c] %@", searchText)
+            searchPredicate = NSPredicate(format: "noteBody contains[c] %@ OR noteTitle contains[c] %@", searchText, searchText)
             
             // Added from StackOverflow recommendation
             filteredObjects = self.fetchedResultsController.fetchedObjects?.filter() {
@@ -104,8 +104,6 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     // MARK: - Table View
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        //        return self.fetchedResultsController.sections?.count ?? 0
-        // Added from StackOverflow comment
         if searchPredicate == nil {
             return self.fetchedResultsController.sections?.count ?? 0
         } else {
@@ -114,13 +112,6 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        //        if self.searchPredicate == nil {
-        //            let sectionInfo = self.fetchedResultsController.sections![section] as! NSFetchedResultsSectionInfo
-        //            return sectionInfo.numberOfObjects
-        //        }
-        //
-        //        let sectionInfo = self.fetchedResultsController.sections![section] as! NSFetchedResultsSectionInfo
-        //        return sectionInfo.numberOfObjects
         if self.searchPredicate == nil {
             let sectionInfo = self.fetchedResultsController.sections![section] as! NSFetchedResultsSectionInfo
             return sectionInfo.numberOfObjects
@@ -131,17 +122,15 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     
     // Problem in here?
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        // Original code
-        //        let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as! UITableViewCell
-        //        self.configureCell(cell, atIndexPath: indexPath)
-        //        return cell
         let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as! UITableViewCell
         if searchPredicate == nil {
             self.configureCell(cell, atIndexPath: indexPath)
             return cell
         } else {
             // configure the cell based on filteredObjects data
-            cell.textLabel!.text = "Test title"
+            if let note = self.filteredObjects?[indexPath.row] {
+                cell.textLabel?.text = note.noteTitle
+            }
             return cell
         }
     }
@@ -305,7 +294,6 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     }
     
     // MARK: - UISearchBar Delegate methods
-    // added this per useyourloaf.com article. doesn't change anything on a standalone basis
     
     func searchBar(searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
         updateSearchResultsForSearchController(self.searchController)

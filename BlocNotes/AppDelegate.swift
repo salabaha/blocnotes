@@ -27,6 +27,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
         controller.managedObjectContext = self.managedObjectContext
         
         randomNoteCreator() // Creates random notes if none exist in the managed object context
+        
+        setKeyValueStorage()
+        iCloudAccountIsSignedIn()
+        
         return true
     }
     
@@ -69,6 +73,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
     }
     // MARK: - Core Data stack
     
+    // TODO: Might need to take this out? Ask Bjorn
     lazy var applicationDocumentsDirectory: NSURL = {
         // The directory the application uses to store the Core Data store file. This code uses a directory named "com.PPCSoftware.BlocNotes" in the application's documents Application Support directory.
         let urls = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)
@@ -81,29 +86,83 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
         return NSManagedObjectModel(contentsOfURL: modelURL)!
         }()
     
+    // This is the original PSC before I messed around w/ it in the version below.
+//    lazy var persistentStoreCoordinator: NSPersistentStoreCoordinator? = {
+//        // The persistent store coordinator for the application. This implementation creates and return a coordinator, having added the store for the application to it. This property is optional since there are legitimate error conditions that could cause the creation of the store to fail.
+//        // Create the coordinator and store
+//        var coordinator: NSPersistentStoreCoordinator? = NSPersistentStoreCoordinator(managedObjectModel: self.managedObjectModel)
+//        let url = self.applicationDocumentsDirectory.URLByAppendingPathComponent("BlocNotes.sqlite")
+//        var error: NSError? = nil
+//        var failureReason = "There was an error creating or loading the application's saved data."
+//        if coordinator!.addPersistentStoreWithType(NSSQLiteStoreType, configuration: nil, URL: url, options: nil, error: &error) == nil {
+//            coordinator = nil
+//            // Report any error we got.
+//            var dict = [String: AnyObject]()
+//            dict[NSLocalizedDescriptionKey] = "Failed to initialize the application's saved data"
+//            dict[NSLocalizedFailureReasonErrorKey] = failureReason
+//            dict[NSUnderlyingErrorKey] = error
+//            error = NSError(domain: "YOUR_ERROR_DOMAIN", code: 9999, userInfo: dict)
+//            // Replace this with code to handle the error appropriately.
+//            // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+//            NSLog("Unresolved error \(error), \(error!.userInfo)")
+//            abort()
+//        }
+//        
+//        return coordinator
+//        }()
+    
     lazy var persistentStoreCoordinator: NSPersistentStoreCoordinator? = {
         // The persistent store coordinator for the application. This implementation creates and return a coordinator, having added the store for the application to it. This property is optional since there are legitimate error conditions that could cause the creation of the store to fail.
         // Create the coordinator and store
+        
         var coordinator: NSPersistentStoreCoordinator? = NSPersistentStoreCoordinator(managedObjectModel: self.managedObjectModel)
-        let url = self.applicationDocumentsDirectory.URLByAppendingPathComponent("BlocNotes.sqlite")
-        var error: NSError? = nil
-        var failureReason = "There was an error creating or loading the application's saved data."
-        if coordinator!.addPersistentStoreWithType(NSSQLiteStoreType, configuration: nil, URL: url, options: nil, error: &error) == nil {
-            coordinator = nil
-            // Report any error we got.
-            var dict = [String: AnyObject]()
-            dict[NSLocalizedDescriptionKey] = "Failed to initialize the application's saved data"
-            dict[NSLocalizedFailureReasonErrorKey] = failureReason
-            dict[NSUnderlyingErrorKey] = error
-            error = NSError(domain: "YOUR_ERROR_DOMAIN", code: 9999, userInfo: dict)
-            // Replace this with code to handle the error appropriately.
-            // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-            NSLog("Unresolved error \(error), \(error!.userInfo)")
-            abort()
-        }
+        
+        // Setup iCloud in another thread
+        
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { () -> Void in
+            // ** Note: if you adapt this code for your own use, you MUST change this variable:
+            let iCloudEnabledAppID = "A983637AY3.com.PPCSoftware.BlocNotes"
+            
+            // ** Note: if you adapt this code for your own use, you should change this variable:
+            let dataFileName = "BlocNotes.sqlite"
+            
+            // ** Note: For basic usage you shouldn't need to change anything else
+            let iCloudDataDirectoryName = "Data.nosync"
+            let iCloudLogsDirectoryName = "Logs"
+            let fileManager = NSFileManager.defaultManager()
+            let localStore: NSURL = self.applicationDocumentsDirectory.URLByAppendingPathComponent(dataFileName)
+            let iCloud: NSURL = fileManager.URLForUbiquityContainerIdentifier(nil)!
+            
+            // TODO: having trouble "swiftifying" this line
+            if (iCloud) {
+                println("iCloud is working!")
+            } else {
+                println("iCloud is NOT working!")
+            }
+            
+        })
+        
+        
+//        let url = self.applicationDocumentsDirectory.URLByAppendingPathComponent("BlocNotes.sqlite")
+//        var error: NSError? = nil
+//        var failureReason = "There was an error creating or loading the application's saved data."
+//        if coordinator!.addPersistentStoreWithType(NSSQLiteStoreType, configuration: nil, URL: url, options: nil, error: &error) == nil {
+//            coordinator = nil
+//            // Report any error we got.
+//            var dict = [String: AnyObject]()
+//            dict[NSLocalizedDescriptionKey] = "Failed to initialize the application's saved data"
+//            dict[NSLocalizedFailureReasonErrorKey] = failureReason
+//            dict[NSUnderlyingErrorKey] = error
+//            error = NSError(domain: "YOUR_ERROR_DOMAIN", code: 9999, userInfo: dict)
+//            // Replace this with code to handle the error appropriately.
+//            // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+//            NSLog("Unresolved error \(error), \(error!.userInfo)")
+//            abort()
+//        }
         
         return coordinator
         }()
+
     
     lazy var managedObjectContext: NSManagedObjectContext? = {
         // Returns the managed object context for the application (which is already bound to the persistent store coordinator for the application.) This property is optional since there are legitimate error conditions that could cause the creation of the context to fail.
@@ -153,5 +212,48 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
             println("There are already notes in the app")
         }
     }
+    
+    // MARK: - iCloud methods
+    func iCloudAccountIsSignedIn() -> Bool{
+        if let token = NSFileManager.defaultManager().ubiquityIdentityToken {
+            println("iCloud account is signed in")
+            return true
+        } else {
+            println("iCloud account is NOT signed in")
+            return false
+        }
+    }
+
+    
+    func setKeyValueStorage () {
+        // KeyValueStorage methods
+        // register to receive notifications from the store (TODO: which store?)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("storeDidChange"), name: NSUbiquitousKeyValueStoreDidChangeExternallyNotification, object: NSUbiquitousKeyValueStore.defaultStore())
+        
+        // get changes that might have happened while this app wasn't running
+        NSUbiquitousKeyValueStore.defaultStore().synchronize()
+    }
+    
+    func storeDidChange(notification: NSNotification) {
+        // Example code:
+        // Need to customize
+        // Retrieve the changes from iCloud
+        // _notes = [[[NSUbiquitousKeyValueStore defaultStore] arrayForKey:@"AVAILABLE_NOTES"] mutableCopy];
+        // Reload the table view to show changes
+        // [self.tableView reloadData];
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
 }
 

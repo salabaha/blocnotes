@@ -25,3 +25,7 @@ http://useyourloaf.com/blog/2015/02/16/updating-to-the-ios-8-search-controller.h
 
 Using this as a model for what to do:
 http://stackoverflow.com/questions/27656678/deleting-from-uisearchcontrollers-filtered-search-results
+
+// open items
+segue from filtered notes doesn't display correct note
+- update segue "showDetail"

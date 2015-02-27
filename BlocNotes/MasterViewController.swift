@@ -9,17 +9,18 @@
 import UIKit
 import CoreData
 
+// TODO: segue doesn't work from notes displayed as searches.
+
 class MasterViewController: UITableViewController, NSFetchedResultsControllerDelegate, UISearchControllerDelegate, UISearchResultsUpdating, UISearchBarDelegate {
     
     var detailViewController: DetailViewController? = nil
-    var addNoteViewController:AddNoteViewController? = nil  // I added this
+    var addNoteViewController:AddNoteViewController? = nil
     var managedObjectContext: NSManagedObjectContext? = nil
     
     // Added variable for UISearchController
     var searchController: UISearchController!
-    var searchPredicate: NSPredicate? // I added this. It's optional on and gets set later
-    var filteredObjects : [Note]? = nil /// Added this, per StackOverflow
-    
+    var searchPredicate: NSPredicate?
+    var filteredObjects : [Note]? = nil
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,12 +38,12 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         searchController = UISearchController(searchResultsController: nil)
         searchController.searchResultsUpdater = self
         searchController.dimsBackgroundDuringPresentation = false
-        searchController.searchResultsUpdater = self    // StackOverflow suggestion
-        searchController.delegate = self                // StackOverflow suggestion
+        searchController.searchResultsUpdater = self
+        searchController.delegate = self
         searchController.searchBar.sizeToFit()
         self.tableView.tableHeaderView = searchController?.searchBar
         self.tableView.delegate = self
-        self.definesPresentationContext = true
+        self.definesPresentationContext = false
     }
     
     override func didReceiveMemoryWarning() {
@@ -71,35 +72,69 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         let searchText = self.searchController?.searchBar.text // steve put breakpoint
         println(searchController.searchBar.text)
         if let searchText = searchText {
-            searchPredicate = NSPredicate(format: "noteBody contains[c] %@ OR noteTitle contains[c] %@", searchText, searchText)
             
-            // Added from StackOverflow recommendation
+            // This sets up the seachPredicate and filteredObjects array
+            searchPredicate = NSPredicate(format: "noteBody contains[c] %@ OR noteTitle contains[c] %@", searchText, searchText)
             filteredObjects = self.fetchedResultsController.fetchedObjects?.filter() {
                 return self.searchPredicate!.evaluateWithObject($0)
                 } as! [Note]?
+            
             self.tableView.reloadData()
             println(searchPredicate)
         }
     }
+
+        // MARK: - Segues
+        override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+            if segue.identifier == "showDetail" {
+                if let indexPath = self.tableView.indexPathForSelectedRow() {
+                    searchDisplayController?.searchResultsDelegate = self
+                    let object = self.fetchedResultsController.objectAtIndexPath(indexPath) as! NSManagedObject
+                    let controller = (segue.destinationViewController as! UINavigationController).topViewController as! DetailViewController
+                    controller.detailItem = object
+                    controller.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem()
+                    controller.navigationItem.leftItemsSupplementBackButton = true
+                }
+            }
     
-    // MARK: - Segues
-    
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if segue.identifier == "showDetail" {
-            if let indexPath = self.tableView.indexPathForSelectedRow() {
-                let object = self.fetchedResultsController.objectAtIndexPath(indexPath) as! NSManagedObject
-                let controller = (segue.destinationViewController as! UINavigationController).topViewController as! DetailViewController
-                controller.detailItem = object
-                controller.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem()
-                controller.navigationItem.leftItemsSupplementBackButton = true
+            if segue.identifier == "addNote" {
+                println("segue.identifier is addNote")
+                let controller = (segue.destinationViewController as! UINavigationController).topViewController as! AddNoteViewController
             }
         }
-        
-        if segue.identifier == "addNote" {
-            println("segue.identifier is addNote")
-            let controller = (segue.destinationViewController as! UINavigationController).topViewController as! AddNoteViewController
-        }
-    }
+    
+//    // MARK: - Segues
+//    // TODO: fix this
+//    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+//        if segue.identifier == "showDetail" {
+//            if ((searchDisplayController?.active) != nil) {
+//                // TODO: I need to fix this. Need help.
+//                var indexPath = self.tableView.indexPathForSelectedRow()!
+//                searchDisplayController?.searchResultsDelegate = self
+//                let note = self.fetchedResultsController.objectAtIndexPath(indexPath) as! Note
+//                let controller = (segue.destinationViewController as! UINavigationController).topViewController as! DetailViewController
+//                controller.detailItem = note
+//            } else {
+//                // index path from main table ...
+//                if let indexPath = self.tableView.indexPathForSelectedRow()! {
+//                    searchDisplayController?.searchResultsDelegate = self
+//                    let object = self.fetchedResultsController.objectAtIndexPath(indexPath) as! NSManagedObject
+//                    let controller = (segue.destinationViewController as! UINavigationController).topViewController as! DetailViewController
+//                    controller.detailItem = object
+//                    controller.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem()
+//                    controller.navigationItem.leftItemsSupplementBackButton = true
+//                }
+//            }
+//
+//        }
+//        
+//        if segue.identifier == "addNote" {
+//            println("segue.identifier is addNote")
+//            let controller = (segue.destinationViewController as! UINavigationController).topViewController as! AddNoteViewController
+//        }
+//    }
+
+    
     
     // MARK: - Table View
     
@@ -120,9 +155,9 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         }
     }
     
-    // Problem in here?
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as! UITableViewCell
+        // TODO: if you broke something, nuke "self" from tableView below
+        let cell = self.tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as! UITableViewCell
         if searchPredicate == nil {
             self.configureCell(cell, atIndexPath: indexPath)
             return cell
@@ -281,8 +316,6 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         }
     }
     
-    
-    
     func controllerDidChangeContent(controller: NSFetchedResultsController) {
         if self.searchPredicate == nil {
             self.tableView.endUpdates()
@@ -299,6 +332,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         updateSearchResultsForSearchController(self.searchController)
     }
     
+    // This resets searchPredicate & filteredObjects when the SearchController is dismissed
     func didDismissSearchController(searchController: UISearchController) {
         println("didDismissSearchController")
         self.searchPredicate = nil

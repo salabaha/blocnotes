@@ -96,7 +96,14 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
             if let cell = sender as? UITableViewCell {
                 
                 let indexPath = tableView.indexPathForCell(cell)!
-                var selectedNote = self.fetchedResultsController.objectAtIndexPath(indexPath) as? Note // <--this is "everything"
+                
+                var selectedNote: Note?
+                
+                if filteredObjects?.count > 0 {
+                    selectedNote = filteredObjects![indexPath.row]
+                }else {
+                    selectedNote = self.fetchedResultsController.objectAtIndexPath(indexPath) as? Note // <--this is "everything"
+                }
                 
                 if let note = selectedNote {
                     

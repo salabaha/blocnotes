@@ -131,14 +131,32 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
             let iCloudLogsDirectoryName = "Logs"
             let fileManager = NSFileManager.defaultManager()
             let localStore: NSURL = self.applicationDocumentsDirectory.URLByAppendingPathComponent(dataFileName)
-            var iCloud: NSURL = fileManager.URLForUbiquityContainerIdentifier(nil)!
-            
-//            // TODO: having trouble "swiftifying" this line
-//            if (self.iCloud: NSURL != nil) {
-//                println("iCloud is working!")
-//            } else {
-//                println("iCloud is NOT working!")
-//            }
+            if let iCloud = fileManager.URLForUbiquityContainerIdentifier(nil) {
+                println("iCloud is working!") // And you can access iCloud here
+                let iCloudLogsPath: NSURL = NSURL.fileURLWithPath((iCloud.path?.stringByAppendingPathComponent(iCloudLogsDirectoryName))!)!
+                println("iCloudEnabledAppID = \(iCloudEnabledAppID)")
+                println("dataFileName = \(dataFileName)")
+                println("iCloudDataDirectoryName = \(iCloudDataDirectoryName)")
+                println("iCloudLogsDirectoryName = \(iCloudLogsDirectoryName)")
+                println("iCloud = \(iCloud)")
+                println("iCloudLogsPath = \(iCloudLogsPath)")
+                
+                // Stop point:
+                // working on swiftifying this
+                
+//                if ((fileManager.fileExistsAtPath((iCloud.path)!.stringByAppendingPathComponent(iCloudDataDirectoryName))) == false) {
+//                    var fileSystemError: NSError
+//                    (fileManager.createDirectoryAtPath(iCloud.path.stringByAppendingPathComponent(iCloudDataDirectoryName), withIntermediateDirectories: true, attributes: nil, error: &fileSystemError)
+//                }
+                
+                
+
+                
+                
+            } else {
+                println("iCloud is NOT working!") // And you don't need iCloud here
+                
+            }
             
         })
         

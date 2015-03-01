@@ -83,58 +83,15 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
             println(searchPredicate)
         }
     }
-
-        // MARK: - Segues
-        override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-            if segue.identifier == "showDetail" {
-                if let indexPath = self.tableView.indexPathForSelectedRow() {
-                    searchDisplayController?.searchResultsDelegate = self
-                    let object = self.fetchedResultsController.objectAtIndexPath(indexPath) as! NSManagedObject
-                    let controller = (segue.destinationViewController as! UINavigationController).topViewController as! DetailViewController
-                    controller.detailItem = object
-                    controller.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem()
-                    controller.navigationItem.leftItemsSupplementBackButton = true
-                }
-            }
     
-            if segue.identifier == "addNote" {
-                println("segue.identifier is addNote")
-                let controller = (segue.destinationViewController as! UINavigationController).topViewController as! AddNoteViewController
-            }
+    // MARK: - Segues
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        
+        if segue.identifier == "addNote" {
+            println("segue.identifier is addNote")
+            let controller = (segue.destinationViewController as! UINavigationController).topViewController as! AddNoteViewController
         }
-    
-//    // MARK: - Segues
-//    // TODO: fix this
-//    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-//        if segue.identifier == "showDetail" {
-//            if ((searchDisplayController?.active) != nil) {
-//                // TODO: I need to fix this. Need help.
-//                var indexPath = self.tableView.indexPathForSelectedRow()!
-//                searchDisplayController?.searchResultsDelegate = self
-//                let note = self.fetchedResultsController.objectAtIndexPath(indexPath) as! Note
-//                let controller = (segue.destinationViewController as! UINavigationController).topViewController as! DetailViewController
-//                controller.detailItem = note
-//            } else {
-//                // index path from main table ...
-//                if let indexPath = self.tableView.indexPathForSelectedRow()! {
-//                    searchDisplayController?.searchResultsDelegate = self
-//                    let object = self.fetchedResultsController.objectAtIndexPath(indexPath) as! NSManagedObject
-//                    let controller = (segue.destinationViewController as! UINavigationController).topViewController as! DetailViewController
-//                    controller.detailItem = object
-//                    controller.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem()
-//                    controller.navigationItem.leftItemsSupplementBackButton = true
-//                }
-//            }
-//
-//        }
-//        
-//        if segue.identifier == "addNote" {
-//            println("segue.identifier is addNote")
-//            let controller = (segue.destinationViewController as! UINavigationController).topViewController as! AddNoteViewController
-//        }
-//    }
-
-    
+    }
     
     // MARK: - Table View
     
@@ -154,6 +111,34 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
             return filteredObjects?.count ?? 0
         }
     }
+    
+    // TODO: stackoverflow question
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        var selectedNote: Note?
+        
+        // Check to see which table view cell was selected.
+        if tableView == self.tableView {
+            selectedNote = self.fetchedResultsController.objectAtIndexPath(indexPath) as? Note // <--this is "everything"
+        } else {
+            // need this to unwrap the optional
+            if let filteredObjects = filteredObjects {
+                selectedNote = filteredObjects[indexPath.row]
+            }
+        }
+        
+        // Set up the detail view controller to show.
+        let detailViewController = DetailViewController()
+
+        detailViewController.detailDescriptionLabel.text = (selectedNote!.valueForKeyPath("noteBody") as! String)
+        
+        // Note: Should not be necessary but current iOS 8.0 bug requires it.
+        tableView.deselectRowAtIndexPath(tableView.indexPathForSelectedRow()!, animated: false)
+        
+        // original code
+        navigationController?.pushViewController(detailViewController, animated: true)
+        
+    }
+    
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         // TODO: if you broke something, nuke "self" from tableView below

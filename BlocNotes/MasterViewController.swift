@@ -91,6 +91,20 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
             println("segue.identifier is addNote")
             let controller = (segue.destinationViewController as! UINavigationController).topViewController as! AddNoteViewController
         }
+        else if segue.identifier == "showDetail" {
+            
+            if let cell = sender as? UITableViewCell {
+                
+                let indexPath = tableView.indexPathForCell(cell)!
+                var selectedNote = self.fetchedResultsController.objectAtIndexPath(indexPath) as? Note // <--this is "everything"
+                
+                if let note = selectedNote {
+                    
+                    let controller = (segue.destinationViewController as! UINavigationController).topViewController as! DetailViewController
+                    controller.detailItem = note
+                }
+            }
+        }
     }
     
     // MARK: - Table View
@@ -113,30 +127,9 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     }
     
     // TODO: stackoverflow question
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        var selectedNote: Note?
-        
-        // Check to see which table view cell was selected.
-        if tableView == self.tableView {
-            selectedNote = self.fetchedResultsController.objectAtIndexPath(indexPath) as? Note // <--this is "everything"
-        } else {
-            // need this to unwrap the optional
-            if let filteredObjects = filteredObjects {
-                selectedNote = filteredObjects[indexPath.row]
-            }
-        }
-        
-        // Set up the detail view controller to show.
-        let detailViewController = DetailViewController()
-
-        detailViewController.detailDescriptionLabel.text = (selectedNote!.valueForKeyPath("noteBody") as! String)
-        
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {        
         // Note: Should not be necessary but current iOS 8.0 bug requires it.
         tableView.deselectRowAtIndexPath(tableView.indexPathForSelectedRow()!, animated: false)
-        
-        // original code
-        navigationController?.pushViewController(detailViewController, animated: true)
-        
     }
     
     
